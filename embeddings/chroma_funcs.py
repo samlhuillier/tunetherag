@@ -34,7 +34,7 @@ def setup_collection(hf_dataset_name, feature_to_embed, dataset_split, collectio
 
 # TODO: this dataset_path could be both a huggingface name or a local path. Then we leverage transformers to pull it agnostically
 def get_closest_entries(
-    hf_dataset_name, feature_to_embed, query, n_results=5, dataset_split="train"
+    hf_dataset_name, embed_feature, query, n_results=5, dataset_split="train"
 ):
     collection_name = hf_dataset_name.replace("/", "-") + "-" + dataset_split
     # client.delete_collection(name=collection_name)
@@ -44,7 +44,7 @@ def get_closest_entries(
         # embed and create collection...
         print("hey x")
         collection = setup_collection(
-            hf_dataset_name, feature_to_embed, dataset_split, collection
+            hf_dataset_name, embed_feature, dataset_split, collection
         )
 
     print("collection.count()", collection.count())
@@ -52,8 +52,10 @@ def get_closest_entries(
     results = collection.query(
         query_texts=[query],  # TODO: look into what multiple queries will do here.
         n_results=n_results,
+        where={embed_feature: {"$ne": query}},
     )
     print(results["metadatas"])
+    # TODO: add clause to remove exact matches
     return results
 
 
