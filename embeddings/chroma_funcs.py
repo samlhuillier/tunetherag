@@ -32,6 +32,7 @@ def get_closest_entries(
         n_results=n_results,
         where={embed_feature: {"$ne": query}},  # exact match is train/val contamination
     )
+    # TODO: throw error here if there are any exact matches
     return results
 
 
