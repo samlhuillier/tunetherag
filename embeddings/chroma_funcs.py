@@ -30,9 +30,8 @@ def get_closest_entries(
     results = collection.query(
         query_texts=[query],  # TODO: look into what multiple queries will do here.
         n_results=n_results,
-        where={embed_feature: {"$ne": query}},
+        where={embed_feature: {"$ne": query}},  # exact match is train/val contamination
     )
-    print(results["metadatas"])
     return results
 
 
