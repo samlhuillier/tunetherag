@@ -3,3 +3,5 @@ first-rag-codellama-7b
 wandb
 training-code/checkpoints
 chroma_store
+training-code/fifth-rag-codellama-7b-from-checkpoint
+training-code/sixth-contextlen-1500-rag-sql-codellama7b

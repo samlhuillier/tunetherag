@@ -10,32 +10,22 @@ import json
 #         # print(data)
 
 data = []
-with open('sql-create-context-spider-intersect-validation-with-prompts.jsonl', 'r') as f:
+with open('/root/finetune-llm-for-rag/datasets/sql/MiniLM-L6/sql-create-context-spider-intersect-validation-with-prompts.jsonl', 'r') as f:
     for line in f:
         data.append(json.loads(line))
 # print(data_list[2])
 # Step 2: Apply the function to each entry
 # responses = map(your_function, data)
 def generate_prompt(data_point):
-#     full_prompt =f"""You are a powerful text-to-SQL model. Your job is to answer questions about a database. You are given a question and context regarding one or more tables. You must output the SQL query that answers the question.
-
-# ### Input:
-# {data_point["question"]}
-
-# ### Context:
-# {data_point["context"]}
-
-# ### Response:
-# """
-#     print(full_prompt)
+    # print("inference prompt is: ", data_point['inference_prompt'])
     return data_point['inference_prompt']
 prompts = []
 for data_point in data:
     # prompt = generate_prompt(data_point)
     # append prompt to prompts
-    print("INBETWEEN POUNTS:")
+    # print("INBETWEEN POUNTS:")
     prompts.append(generate_prompt(data_point))
-print(prompts)
+# print(prompts)
 import torch
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig, AutoTokenizer
 
@@ -47,7 +37,7 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",
 )
 from peft import PeftModel
-model = PeftModel.from_pretrained(model, "/home/sam/finetune-llm-for-rag/first-rag-codellama-7b/checkpoint-160")
+model = PeftModel.from_pretrained(model, "/root/finetune-llm-for-rag/training-code/fifth-rag-codellama-7b-from-checkpoint/checkpoint-580")
 tokenizer = AutoTokenizer.from_pretrained("codellama/CodeLlama-7b-hf")
 
 tokenizer.pad_token = tokenizer.eos_token
@@ -56,7 +46,7 @@ batch_size = 16  # You can adjust the batch size based on your GPU capacity
 outputs = []
 
 model.eval()
-with torch.no_grad(), open("first-finetune-of-rag-codellama7b.txt", "a") as f:
+with torch.no_grad(), open("fififth-finetune-of-rag-codellama7b.txt", "a") as f:
     for i in range(0, len(prompts), batch_size):
         print("i is: ", i)
         batch_inputs = prompts[i : i + batch_size]
@@ -79,7 +69,9 @@ with torch.no_grad(), open("first-finetune-of-rag-codellama7b.txt", "a") as f:
         ]
         outputs.extend(batch_decoded_outputs)
         # print(outputs)
-        for b in batch_decoded_outputs:
+        for i in range(len(batch_decoded_outputs)):
+            print("input is: ", prompts[i])
+            b = batch_decoded_outputs[i]
             print('full b is: ', b)
             print("B IS: ", b.split('\n')[1])
             f.write(b.split('\n')[1] + "\n")

@@ -55,9 +55,10 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments,
 # %%
 from datasets import load_dataset
 from datasets import load_dataset
-train_dataset = load_dataset('json', data_files='inference/sql-create-context-spider-intersect-train-with-prompts.jsonl', split='train')
-eval_dataset = load_dataset('json', data_files='inference/sql-create-context-spider-intersect-validation-with-prompts.jsonl', split='train')
-
+train_dataset = load_dataset('json', data_files='/root/finetune-llm-for-rag/datasets/sql/MiniLM-L6/sql-create-context-spider-intersect-train-with-prompts.jsonl', split='train')
+eval_dataset = load_dataset('json', data_files='/root/finetune-llm-for-rag/datasets/sql/MiniLM-L6/sql-create-context-spider-intersect-validation-with-prompts.jsonl', split='train')
+print(train_dataset)
+print(eval_dataset)
 # %% [markdown]
 # The above pulls the dataset from the Huggingface Hub and splits 10% of it into an evaluation set to check how well the model is doing through training. If you want to load your own dataset do this:
 # 
@@ -89,49 +90,6 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 tokenizer = AutoTokenizer.from_pretrained("codellama/CodeLlama-7b-hf")
 
-from peft import PeftModel
-model = PeftModel.from_pretrained(model, "/home/sam/finetune-llm-for-rag/first-rag-codellama-7b/checkpoint-160")
-# %% [markdown]
-# torch_dtype=torch.float16 means computations are performed using a float16 representation, even though the values themselves are 8 bit ints.
-# 
-# If you get error "ValueError: Tokenizer class CodeLlamaTokenizer does not exist or is not currently imported." Make sure you have transformers version is 4.33.0.dev0 and accelerate is >=0.20.3.
-# 
-
-# %% [markdown]
-# ### 3. Check base model
-# A very good common practice is to check whether a model can already do the task at hand. Fine-tuning is something you want to try to avoid at all cost:
-# 
-
-# %%
-# eval_prompt = """You are a powerful text-to-SQL model. Your job is to answer questions about a database. You are given a question and context regarding one or more tables.
-
-# You must output the SQL query that answers the question.
-# ### Input:
-# Which Class has a Frequency MHz larger than 91.5, and a City of license of hyannis, nebraska?
-
-# ### Context:
-# CREATE TABLE table_name_12 (class VARCHAR, frequency_mhz VARCHAR, city_of_license VARCHAR)
-
-# ### Response:
-# """
-# # {'question': 'Name the comptroller for office of prohibition', 'context': 'CREATE TABLE table_22607062_1 (comptroller VARCHAR, ticket___office VARCHAR)', 'answer': 'SELECT comptroller FROM table_22607062_1 WHERE ticket___office = "Prohibition"'}
-# model_input = tokenizer(eval_prompt, return_tensors="pt").to("cuda")
-
-# model.eval()
-# with torch.no_grad():
-#     print(tokenizer.decode(model.generate(**model_input, max_new_tokens=100)[0], skip_special_tokens=True))
-
-# %% [markdown]
-# I get the output:
-# ```
-# SELECT * FROM table_name_12 WHERE class > 91.5 AND city_of_license = 'hyannis, nebraska'
-# ```
-# which is clearly wrong if the input is asking for just class!
-
-# %% [markdown]
-# ### 4. Tokenization
-# Setup some tokenization settings like left padding because it makes [training use less memory](https://ai.stackexchange.com/questions/41485/while-fine-tuning-a-decoder-only-llm-like-llama-on-chat-dataset-what-kind-of-pa):
-
 # %%
 tokenizer.add_eos_token = True
 tokenizer.pad_token_id = 0
@@ -145,14 +103,14 @@ def tokenize(prompt):
     result = tokenizer(
         prompt,
         truncation=True,
-        max_length=512,
+        max_length=1500,
         padding=False,
         return_tensors=None,
     )
 
     # "self-supervised learning" means the labels are also the inputs:
     result["labels"] = result["input_ids"].copy()
-
+    print("length of input_ids: ", len(result["input_ids"]))
     return result
 
 # %% [markdown]
@@ -161,7 +119,7 @@ def tokenize(prompt):
 # %%
 def generate_and_tokenize_prompt(data_point):
     full_prompt = data_point["full_prompt"]
-    print(full_prompt)
+    # print(full_prompt)
     return tokenize(full_prompt)
 
 # %% [markdown]
@@ -197,7 +155,7 @@ model = get_peft_model(model, config)
 # Optional stuff to setup Weights and Biases to view training graphs:
 
 # %%
-wandb_project = "first-rag-sql-codellama7b"
+wandb_project = "sixth-contextlen-1500-rag-sql-codellama7b"
 if len(wandb_project) > 0:
     os.environ["WANDB_PROJECT"] = wandb_project
 
@@ -214,23 +172,23 @@ if torch.cuda.device_count() > 1:
 
 # %%
 batch_size = 128
-per_device_train_batch_size = 32
+per_device_train_batch_size = 16
 gradient_accumulation_steps = batch_size // per_device_train_batch_size
-output_dir = "second-rag-codellama-7b-from-checkpoint"
+output_dir = "sixth-contextlen-1500-rag-sql-codellama7b"
 
 training_args = TrainingArguments(
         per_device_train_batch_size=per_device_train_batch_size,
         gradient_accumulation_steps=gradient_accumulation_steps,
         warmup_steps=100,
-        max_steps=400,
+        max_steps=600,
         learning_rate=3e-4,
         fp16=True,
         logging_steps=10,
         optim="adamw_torch",
         evaluation_strategy="steps", # if val_set_size > 0 else "no",
         save_strategy="steps",
-        eval_steps=10,
-        save_steps=10,
+        eval_steps=20,
+        save_steps=20,
         output_dir=output_dir,
         # save_total_limit=3,
         load_best_model_at_end=False,
