@@ -41,7 +41,7 @@ from peft import (
     prepare_model_for_int8_training,
     set_peft_model_state_dict,
 )
-from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForSeq2Seq
+from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForSeq2Seq, TrainerCallback, logging
 
 
 # %% [markdown]
@@ -53,7 +53,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments,
 # 
 
 # %%
-from datasets import load_dataset
 from datasets import load_dataset
 train_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-train-with-2-examples.jsonl', split='train')
 eval_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-validation-with-2-examples.jsonl', split='train')
@@ -111,7 +110,7 @@ def tokenize(data_point):
 
     # "self-supervised learning" means the labels are also the inputs:
     result["labels"] = result["input_ids"].copy()
-    print("length of input_ids: ", len(result["input_ids"]))
+    # print("length of input_ids: ", len(result["input_ids"]))
     return result
 
 # %% [markdown]
@@ -173,21 +172,35 @@ if torch.cuda.device_count() > 1:
 
 # %%
 batch_size = 128
-per_device_train_batch_size = 32
+per_device_train_batch_size = 8
 gradient_accumulation_steps = batch_size // per_device_train_batch_size
 output_dir = "testing-insights"
 
-# class PrintBatchCallback(TrainerCallback):
-#     def on_train_begin(self, args, state, control, **kwargs):
-#         logging.set_verbosity_info()  # Set logging level to info to see the printed messages
-
-#     def on_train_batch_start(self, args, state, control, model, **kwargs):
-#         batch = kwargs["batch"]
-#         # Decode the input_ids in the batch
-#         decoded_samples = tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
-        
-#         # Here, we'll print the first sample in the batch as an example
-#         logging.info(f"Processing batch: {state.global_step}, First sample: {decoded_samples[0]}")
+class PrintBatchCallback(TrainerCallback):
+    def on_train_begin(self, args, state, control, **kwargs):
+        logging.set_verbosity_info()  # Set logging level to info to see the printed messages
+    def on_step_begin(self, args, state, control, model=None, train_dataloader=None, optimizer=None, **kwargs):
+        # Access the batch data from the optimizer's closure
+        closure = optimizer.state["closure"]
+        print("running on_step_begin")
+        if closure:
+            batch = closure().closure_cache
+            # The batch is a tuple where the first element contains the batch data
+            inputs = batch[0]
+            
+            # Decode the input_ids in the batch
+            decoded_samples = tokenizer.batch_decode(inputs["input_ids"], skip_special_tokens=True)
+            
+            # Here, we'll print the first sample in the batch as an example
+            print(f"Processing batch: {state.global_step}, First sample: {decoded_samples[0]}")
+    # def on_step_begin(self, args, state, control, model, **kwargs):
+    #     print("kwargs are: ", kwargs)
+    #     batch = kwargs["batch"]
+    #     # Decode the input_ids in the batch
+    #     decoded_samples = tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
+    #     print("YOOOOO")
+    #     # Here, we'll print the first sample in the batch as an example
+    #     logging.info(f"Processing batch: {state.global_step}, First sample: {decoded_samples[0]}")
 
 
 training_args = TrainingArguments(
@@ -220,6 +233,7 @@ trainer = Trainer(
     data_collator=DataCollatorForSeq2Seq(
         tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
     ),
+    callbacks=[PrintBatchCallback()],
 )
 
 # %% [markdown]
