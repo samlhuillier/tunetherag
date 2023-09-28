@@ -55,8 +55,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments,
 # %%
 from datasets import load_dataset
 from datasets import load_dataset
-train_dataset = load_dataset('json', data_files='/root/finetune-llm-for-rag/datasets/sql/MiniLM-L6/sql-create-context-spider-intersect-train-with-prompts.jsonl', split='train')
-eval_dataset = load_dataset('json', data_files='/root/finetune-llm-for-rag/datasets/sql/MiniLM-L6/sql-create-context-spider-intersect-validation-with-prompts.jsonl', split='train')
+train_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-train-with-2-examples.jsonl', split='train')
+eval_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-validation-with-2-examples.jsonl', split='train')
 print(train_dataset)
 print(eval_dataset)
 # %% [markdown]
@@ -99,11 +99,12 @@ tokenizer.padding_side = "left"
 # Setup the tokenize function to make labels and input_ids the same. This is basically what [self-supervised fine-tuning](https://neptune.ai/blog/self-supervised-learning) is:
 
 # %%
-def tokenize(prompt):
+def tokenize(data_point):
+    prompt = data_point["full_prompt"]
     result = tokenizer(
         prompt,
         truncation=True,
-        max_length=1500,
+        max_length=700,
         padding=False,
         return_tensors=None,
     )
@@ -118,9 +119,9 @@ def tokenize(prompt):
 
 # %%
 def generate_and_tokenize_prompt(data_point):
-    full_prompt = data_point["full_prompt"]
+    # full_prompt = data_point["full_prompt"]
     # print(full_prompt)
-    return tokenize(full_prompt)
+    return tokenize(data_point)
 
 # %% [markdown]
 # Reformat to prompt and tokenize each sample:
@@ -155,7 +156,7 @@ model = get_peft_model(model, config)
 # Optional stuff to setup Weights and Biases to view training graphs:
 
 # %%
-wandb_project = "sixth-contextlen-1500-rag-sql-codellama7b"
+wandb_project = "testing-insights"
 if len(wandb_project) > 0:
     os.environ["WANDB_PROJECT"] = wandb_project
 
@@ -172,9 +173,22 @@ if torch.cuda.device_count() > 1:
 
 # %%
 batch_size = 128
-per_device_train_batch_size = 16
+per_device_train_batch_size = 32
 gradient_accumulation_steps = batch_size // per_device_train_batch_size
-output_dir = "sixth-contextlen-1500-rag-sql-codellama7b"
+output_dir = "testing-insights"
+
+# class PrintBatchCallback(TrainerCallback):
+#     def on_train_begin(self, args, state, control, **kwargs):
+#         logging.set_verbosity_info()  # Set logging level to info to see the printed messages
+
+#     def on_train_batch_start(self, args, state, control, model, **kwargs):
+#         batch = kwargs["batch"]
+#         # Decode the input_ids in the batch
+#         decoded_samples = tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
+        
+#         # Here, we'll print the first sample in the batch as an example
+#         logging.info(f"Processing batch: {state.global_step}, First sample: {decoded_samples[0]}")
+
 
 training_args = TrainingArguments(
         per_device_train_batch_size=per_device_train_batch_size,
@@ -187,15 +201,15 @@ training_args = TrainingArguments(
         optim="adamw_torch",
         evaluation_strategy="steps", # if val_set_size > 0 else "no",
         save_strategy="steps",
-        eval_steps=20,
-        save_steps=20,
+        eval_steps=10,
+        save_steps=10,
         output_dir=output_dir,
         # save_total_limit=3,
         load_best_model_at_end=False,
         # ddp_find_unused_parameters=False if ddp else None,
         group_by_length=True, # group sequences of roughly the same length together to speed up training
         report_to="wandb", # if use_wandb else "none",
-        run_name=f"codellama-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
+        run_name=f"2-examples-sql-codellama7b-rag-test-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
     )
 
 trainer = Trainer(
