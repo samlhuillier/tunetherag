@@ -5,3 +5,6 @@ training-code/checkpoints
 chroma_store
 training-code/fifth-rag-codellama-7b-from-checkpoint
 training-code/sixth-contextlen-1500-rag-sql-codellama7b
+embeddings/__pycache__/
+embeddings/__pycache__/chroma_funcs.cpython-310.pyc
+embeddings/__pycache__/chroma_funcs.cpython-310.pyc

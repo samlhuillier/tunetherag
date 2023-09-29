@@ -60,7 +60,7 @@ def get_closest_entries(collection, query, embed_feature, n_results=5):
     return results
 
 
-def get_random_entries(collection, embed_feature, n_results=1):
+def get_random_entries(collection, n_results=1):
     # so we just query the length of the collection then work
     # total_items = collection.count()
     results = collection.query(
