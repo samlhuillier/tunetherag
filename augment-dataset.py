@@ -121,9 +121,12 @@ print(default_ef.model)
 # so first we need to generate the knowledge_base
 dataset_name = "samlhuillier/sql-create-context-spider-intersect"
 knowledge_base = generate_knowledge_base_from_hf_dataset(
-    dataset_name, "question", default_ef
+    dataset_name, "question", default_ef, dataset_split="validation"
 )
-augment_dataset_with_prompts(dataset_name, knowledge_base, n_examples=1, randomize=True)
+print(knowledge_base.count())
+entries = get_random_entries(knowledge_base, 1)
+print(entries)
+# augment_dataset_with_prompts(dataset_name, knowledge_base, n_examples=1, randomize=True)
 
 
 # %%
