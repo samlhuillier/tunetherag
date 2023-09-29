@@ -2,6 +2,7 @@ from embeddings.chroma_funcs import (
     get_closest_entries,
     generate_knowledge_base_from_hf_dataset,
     get_random_entries,
+    get_embedding_model_name,
 )
 from datasets import load_dataset
 from chromadb.utils import embedding_functions
@@ -95,7 +96,10 @@ def augment_dataset_with_prompts(
         )
 
         # TODO: add in embedding function:
-        filename = f"{dataset_name.replace('/', '-')}-{split}-with-{n_examples}-examples-random-{randomize}.jsonl"
+        embedding_function = get_embedding_model_name(
+            knowledge_base._embedding_function
+        )
+        filename = f"{dataset_name.replace('/', '-')}-{split}-with-{n_examples}-examples-random-{randomize}-emb_fn-{embedding_function}.jsonl"
 
         # Save the dataset as a JSON file
         dataset.to_json(filename)
@@ -121,12 +125,13 @@ print(default_ef.model)
 # so first we need to generate the knowledge_base
 dataset_name = "samlhuillier/sql-create-context-spider-intersect"
 knowledge_base = generate_knowledge_base_from_hf_dataset(
-    dataset_name, "question", default_ef, dataset_split="validation"
+    dataset_name, "question", default_ef
 )
 print(knowledge_base.count())
-entries = get_random_entries(knowledge_base, 1)
-print(entries)
-# augment_dataset_with_prompts(dataset_name, knowledge_base, n_examples=1, randomize=True)
+print(get_embedding_model_name(knowledge_base._embedding_function))
+# entries = get_random_entries(knowledge_base, 1)
+# print(entries)
+augment_dataset_with_prompts(dataset_name, knowledge_base, n_examples=1, randomize=True)
 
 
 # %%

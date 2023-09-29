@@ -23,20 +23,25 @@ def dataset_chunks(dataset, n):
         yield dataset.select(range(start_idx, end_idx))
 
 
+def get_embedding_model_name(emb_fn):
+    model_name = "default-emb-fn"
+    if hasattr(emb_fn, "_model_name"):
+        model_name = emb_fn._model_name
+    return model_name
+
+
 def generate_knowledge_base_from_hf_dataset(
     hf_dataset_name, embed_feature, emb_fn, dataset_split="train"
 ):
     # so here, we should set the name of the collection based on the emb_fn
     print("embd_fn", emb_fn)
-    model_name = "default-emb-fn"
-    if hasattr(emb_fn, "_model_name"):
-        model_name = emb_fn._model_name
+    model_name = get_embedding_model_name(emb_fn)
     # emb_fn_name = emb_fn._model_name
     collection_name = (
         hf_dataset_name.replace("/", "-") + "-" + dataset_split + "-" + model_name
     )[:62]
 
-    client.delete_collection(collection_name)
+    # client.delete_collection(collection_name)
     collection = client.get_or_create_collection(
         name=collection_name, embedding_function=emb_fn
     )
