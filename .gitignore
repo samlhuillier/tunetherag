@@ -12,3 +12,4 @@ training-code/seventh-contextlen-1000-3-examples-rag-sql-codellama7b
 embeddings/__pycache__/
 embeddings/__pycache__/chroma_funcs.cpython-310.pyc
 embeddings/__pycache__/chroma_funcs.cpython-310.pyc
+training-code/1-example-new-fix-chroma-bug-tune-for-rag
