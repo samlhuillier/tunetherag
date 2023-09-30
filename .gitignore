@@ -5,3 +5,7 @@ training-code/checkpoints
 chroma_store
 training-code/fifth-rag-codellama-7b-from-checkpoint
 training-code/sixth-contextlen-1500-rag-sql-codellama7b
+training-code/1-examples-sql-codellama7b-rag-test
+training-code/2-examples-sql-codellama7b-rag-test
+training-code/no-examples-sql-codellama7b-baseline-test
+training-code/seventh-contextlen-1000-3-examples-rag-sql-codellama7b
