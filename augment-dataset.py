@@ -44,16 +44,22 @@ def get_examples(knowledge_base, data_point, n_examples, randomize=False):
     formatted_examples = ""
     if n_examples > 0:
         if randomize:
-            formatted_examples = get_random_entries(knowledge_base, n_examples)
+            formatted_examples = get_random_entries(knowledge_base, n_examples)[
+                "metadatas"
+            ]
         else:
             formatted_examples = get_closest_entries(
                 knowledge_base,
                 data_point["question"],
                 "question",
                 n_results=n_examples,
-            )
-            # print(data_point["question"], " -> ", formatted_examples["metadatas"][0])
-        formatted_examples = format_rag_examples(formatted_examples["metadatas"][0])
+            )["metadatas"][0]
+        print(
+            data_point["question"],
+            " -> ",
+            formatted_examples[0]["question"],
+        )
+        formatted_examples = format_rag_examples(formatted_examples)
     return formatted_examples
 
 
@@ -85,7 +91,7 @@ def add_prompt_features(example, knowledge_base, n_examples, randomize=False):
 
 
 def augment_dataset_with_prompts(
-    dataset_name, knowledge_base, n_examples=5, randomize=False
+    dataset_name, knowledge_base, n_examples=1, randomize=False
 ):
     dataset_dict = load_dataset(dataset_name)
 
@@ -100,7 +106,10 @@ def augment_dataset_with_prompts(
         embedding_function = get_embedding_model_name(
             knowledge_base._embedding_function
         )
-        filename = f"{dataset_name.replace('/', '-')}-{split}-with-{n_examples}-examples-random-{randomize}-emb_fn-{embedding_function}.jsonl"
+        emb_fn_string = ""
+        if not randomize:
+            emb_fn_string = f"-emb_fn-{embedding_function}"
+        filename = f"{dataset_name.replace('/', '-')}-{split}-with-{n_examples}-examples-random-{randomize}{emb_fn_string}.jsonl"
 
         # Save the dataset as a JSON file
         dataset.to_json(filename)
@@ -132,9 +141,7 @@ print(knowledge_base.count())
 print(get_embedding_model_name(knowledge_base._embedding_function))
 # entries = get_random_entries(knowledge_base, 1)
 # print(entries)
-augment_dataset_with_prompts(
-    dataset_name, knowledge_base, n_examples=1, randomize=False
-)
+augment_dataset_with_prompts(dataset_name, knowledge_base, n_examples=1, randomize=True)
 
 
 # %%
