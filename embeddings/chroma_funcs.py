@@ -77,11 +77,19 @@ def generate_knowledge_base_from_hf_dataset(
     return collection
 
 
-def get_closest_entries(collection, query, embed_feature, n_results=5):
+def get_closest_entries(
+    collection, query, embed_feature, n_results=5, db_id="sdojfaosdijfaposdfjia"
+):
     results = collection.query(
         query_texts=[query],  # TODO: look into what multiple queries will do here.
         n_results=n_results,
-        where={embed_feature: {"$ne": query}},  # exact match is train/val contamination
+        # where={embed_feature: {"$ne": query}},  # exact match is train/val contamination
+        where={
+            "$and": [
+                {embed_feature: {"$ne": query}},
+                {"db_id": {"$ne": db_id}},
+            ]
+        }
         # TODO: test this:
         # where_document={"$ne": query},  # exact match is train/val contamination
     )
