@@ -52,6 +52,7 @@ def get_examples(knowledge_base, data_point, n_examples, randomize=False):
                 "question",
                 n_results=n_examples,
             )
+            # print(data_point["question"], " -> ", formatted_examples["metadatas"][0])
         formatted_examples = format_rag_examples(formatted_examples["metadatas"][0])
     return formatted_examples
 
@@ -131,7 +132,9 @@ print(knowledge_base.count())
 print(get_embedding_model_name(knowledge_base._embedding_function))
 # entries = get_random_entries(knowledge_base, 1)
 # print(entries)
-augment_dataset_with_prompts(dataset_name, knowledge_base, n_examples=1, randomize=True)
+augment_dataset_with_prompts(
+    dataset_name, knowledge_base, n_examples=1, randomize=False
+)
 
 
 # %%
