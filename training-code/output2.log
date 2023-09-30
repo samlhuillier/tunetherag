@@ -1,672 +1,0 @@
-nohup: ignoring input
-Found cached dataset json (/root/.cache/huggingface/datasets/json/default-451703fd23ff8620/0.0.0/0f7e3662623656454fcd2b650f34e886a7db4b9104504885bd462096cc7a9f51)
-Found cached dataset json (/root/.cache/huggingface/datasets/json/default-941f6b50a392c31c/0.0.0/0f7e3662623656454fcd2b650f34e886a7db4b9104504885bd462096cc7a9f51)
-The model weights are not tied. Please use the `tie_weights` method before using the `infer_auto_device` function.
-Dataset({
-    features: ['db_id', 'context', 'question', 'answer', 'full_prompt', 'inference_prompt'],
-    num_rows: 3961
-})
-Dataset({
-    features: ['db_id', 'context', 'question', 'answer', 'full_prompt', 'inference_prompt'],
-    num_rows: 568
-})
-{'db_id': 'department_management', 'context': 'CREATE TABLE department (budget_in_billions INTEGER)', 'question': 'What are the maximum and minimum budget of the departments?', 'answer': 'SELECT max(budget_in_billions) ,  min(budget_in_billions) FROM department', 'full_prompt': 'You are a powerful text-to-SQL model. Your job is to answer questions about a database. You are given a question and context regarding one or more tables. You must output the SQL query that answers the question.\n\nGiven the following examples:\nExample 1:\n### Input:\nWhich department has the lowest budget?\n\n### Context:\nCREATE TABLE department (dept_name VARCHAR, budget VARCHAR)\n\n### Response:\nSELECT dept_name FROM department ORDER BY budget LIMIT 1\n\nExample 2:\n### Input:\nWhat is the name and building of the departments whose budget is more than the average budget?\n\n### Context:\nCREATE TABLE department (dept_name VARCHAR, building VARCHAR, budget INTEGER)\n\n### Response:\nSELECT dept_name ,  building FROM department WHERE budget  >  (SELECT avg(budget) FROM department)\n\nExample 3:\n### Input:\nList the creation year, name and budget of each department.\n\n### Context:\nCREATE TABLE department (creation VARCHAR, name VARCHAR, budget_in_billions VARCHAR)\n\n### Response:\nSELECT creation ,  name ,  budget_in_billions FROM department\n\nExample 4:\n### Input:\nFind the name and building of the department with the highest budget.\n\n### Context:\nCREATE TABLE department (dept_name VARCHAR, building VARCHAR, budget VARCHAR)\n\n### Response:\nSELECT dept_name ,  building FROM department ORDER BY budget DESC LIMIT 1\n\nExample 5:\n### Input:\nList the names and buildings of all departments sorted by the budget from large to small.\n\n### Context:\nCREATE TABLE department (dept_name VARCHAR, building VARCHAR, budget VARCHAR)\n\n### Response:\nSELECT dept_name ,  building FROM department ORDER BY budget DESC\n\nPlease generate the SQL query that answers the following:\n### Input:\nWhat are the maximum and minimum budget of the departments?\n\n### Context:\nCREATE TABLE department (budget_in_billions INTEGER)\n\n### Response:\nSELECT max(budget_in_billions) ,  min(budget_in_billions) FROM department', 'inference_prompt': 'You are a powerful text-to-SQL model. Your job is to answer questions about a database. You are given a question and context regarding one or more tables. You must output the SQL query that answers the question.\n\nGiven the following examples:\nExample 1:\n### Input:\nWhich department has the lowest budget?\n\n### Context:\nCREATE TABLE department (dept_name VARCHAR, budget VARCHAR)\n\n### Response:\nSELECT dept_name FROM department ORDER BY budget LIMIT 1\n\nExample 2:\n### Input:\nWhat is the name and building of the departments whose budget is more than the average budget?\n\n### Context:\nCREATE TABLE department (dept_name VARCHAR, building VARCHAR, budget INTEGER)\n\n### Response:\nSELECT dept_name ,  building FROM department WHERE budget  >  (SELECT avg(budget) FROM department)\n\nExample 3:\n### Input:\nList the creation year, name and budget of each department.\n\n### Context:\nCREATE TABLE department (creation VARCHAR, name VARCHAR, budget_in_billions VARCHAR)\n\n### Response:\nSELECT creation ,  name ,  budget_in_billions FROM department\n\nExample 4:\n### Input:\nFind the name and building of the department with the highest budget.\n\n### Context:\nCREATE TABLE department (dept_name VARCHAR, building VARCHAR, budget VARCHAR)\n\n### Response:\nSELECT dept_name ,  building FROM department ORDER BY budget DESC LIMIT 1\n\nExample 5:\n### Input:\nList the names and buildings of all departments sorted by the budget from large to small.\n\n### Context:\nCREATE TABLE department (dept_name VARCHAR, building VARCHAR, budget VARCHAR)\n\n### Response:\nSELECT dept_name ,  building FROM department ORDER BY budget DESC\n\nPlease generate the SQL query that answers the following:\n### Input:\nWhat are the maximum and minimum budget of the departments?\n\n### Context:\nCREATE TABLE department (budget_in_billions INTEGER)\n\n### Response:'}
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:08<00:08,  8.63s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:11<00:00,  5.30s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:11<00:00,  5.80s/it]
-Loading cached processed dataset at /root/.cache/huggingface/datasets/json/default-451703fd23ff8620/0.0.0/0f7e3662623656454fcd2b650f34e886a7db4b9104504885bd462096cc7a9f51/cache-417aa456d2cedfc9.arrow
-Map:   0%|          | 0/568 [00:00<?, ? examples/s]Map:  17%|█▋        | 94/568 [00:00<00:00, 916.11 examples/s]Map:  34%|███▎      | 191/568 [00:00<00:00, 940.40 examples/s]length of input_ids:  426
-length of input_ids:  524
-length of input_ids:  526
-length of input_ids:  526
-length of input_ids:  542
-length of input_ids:  469
-length of input_ids:  629
-length of input_ids:  505
-length of input_ids:  484
-length of input_ids:  481
-length of input_ids:  564
-length of input_ids:  452
-length of input_ids:  882
-length of input_ids:  668
-length of input_ids:  605
-length of input_ids:  447
-length of input_ids:  784
-length of input_ids:  534
-length of input_ids:  737
-length of input_ids:  948
-length of input_ids:  595
-length of input_ids:  894
-length of input_ids:  819
-length of input_ids:  799
-length of input_ids:  698
-length of input_ids:  568
-length of input_ids:  511
-length of input_ids:  434
-length of input_ids:  555
-length of input_ids:  685
-length of input_ids:  741
-length of input_ids:  422
-length of input_ids:  841
-length of input_ids:  890
-length of input_ids:  707
-length of input_ids:  901
-length of input_ids:  727
-length of input_ids:  925
-length of input_ids:  524
-length of input_ids:  613
-length of input_ids:  658
-length of input_ids:  499
-length of input_ids:  645
-length of input_ids:  1093
-length of input_ids:  466
-length of input_ids:  650
-length of input_ids:  617
-length of input_ids:  766
-length of input_ids:  755
-length of input_ids:  400
-length of input_ids:  480
-length of input_ids:  443
-length of input_ids:  601
-length of input_ids:  629
-length of input_ids:  588
-length of input_ids:  747
-length of input_ids:  659
-length of input_ids:  619
-length of input_ids:  501
-length of input_ids:  628
-length of input_ids:  609
-length of input_ids:  533
-length of input_ids:  684
-length of input_ids:  489
-length of input_ids:  529
-length of input_ids:  657
-length of input_ids:  535
-length of input_ids:  488
-length of input_ids:  594
-length of input_ids:  532
-length of input_ids:  577
-length of input_ids:  626
-length of input_ids:  590
-length of input_ids:  644
-length of input_ids:  593
-length of input_ids:  618
-length of input_ids:  651
-length of input_ids:  628
-length of input_ids:  657
-length of input_ids:  488
-length of input_ids:  371
-length of input_ids:  585
-length of input_ids:  450
-length of input_ids:  527
-length of input_ids:  671
-length of input_ids:  590
-length of input_ids:  912
-length of input_ids:  625
-length of input_ids:  925
-length of input_ids:  471
-length of input_ids:  362
-length of input_ids:  565
-length of input_ids:  644
-length of input_ids:  520
-length of input_ids:  605
-length of input_ids:  661
-length of input_ids:  554
-length of input_ids:  636
-length of input_ids:  588
-length of input_ids:  738
-length of input_ids:  719
-length of input_ids:  446
-length of input_ids:  538
-length of input_ids:  586
-length of input_ids:  548
-length of input_ids:  430
-length of input_ids:  452
-length of input_ids:  419
-length of input_ids:  377
-length of input_ids:  406
-length of input_ids:  606
-length of input_ids:  454
-length of input_ids:  462
-length of input_ids:  543
-length of input_ids:  804
-length of input_ids:  398
-length of input_ids:  396
-length of input_ids:  464
-length of input_ids:  539
-length of input_ids:  560
-length of input_ids:  508
-length of input_ids:  607
-length of input_ids:  607
-length of input_ids:  583
-length of input_ids:  565
-length of input_ids:  479
-length of input_ids:  579
-length of input_ids:  564
-length of input_ids:  461
-length of input_ids:  612
-length of input_ids:  713
-length of input_ids:  713
-length of input_ids:  799
-length of input_ids:  739
-length of input_ids:  568
-length of input_ids:  582
-length of input_ids:  561
-length of input_ids:  483
-length of input_ids:  502
-length of input_ids:  664
-length of input_ids:  622
-length of input_ids:  738
-length of input_ids:  587
-length of input_ids:  357
-length of input_ids:  477
-length of input_ids:  592
-length of input_ids:  385
-length of input_ids:  484
-length of input_ids:  730
-length of input_ids:  790
-length of input_ids:  682
-length of input_ids:  740
-length of input_ids:  747
-length of input_ids:  700
-length of input_ids:  668
-length of input_ids:  785
-length of input_ids:  512
-length of input_ids:  814
-length of input_ids:  623
-length of input_ids:  609
-length of input_ids:  496
-length of input_ids:  732
-length of input_ids:  628
-length of input_ids:  425
-length of input_ids:  536
-length of input_ids:  700
-length of input_ids:  641
-length of input_ids:  552
-length of input_ids:  578
-length of input_ids:  478
-length of input_ids:  572
-length of input_ids:  545
-length of input_ids:  595
-length of input_ids:  433
-length of input_ids:  544
-length of input_ids:  505
-length of input_ids:  559
-length of input_ids:  501
-length of input_ids:  540
-length of input_ids:  524
-length of input_ids:  503
-length of input_ids:  504
-length of input_ids:  526
-length of input_ids:  596
-length of input_ids:  591
-length of input_ids:  550
-length of input_ids:  559
-length of input_ids:  592
-length of input_ids:  599
-length of input_ids:  596
-length of input_ids:  682
-length of input_ids:  646
-length of input_ids:  757
-length of input_ids:  426
-length of input_ids:  523
-length of input_ids:  614
-length of input_ids:  647
-length of input_ids:  623
-length of input_ids:  457
-length of input_ids:  489
-length of input_ids:  511
-length of input_ids:  644
-length of input_ids:  588
-length of input_ids:  539
-length of input_ids:  573
-length of input_ids:  401
-length of input_ids:  486
-length of input_ids:  641
-length of input_ids:  814
-length of input_ids:  467
-length of input_ids:  555
-length of input_ids:  489
-length of input_ids:  560
-length of input_ids:  522
-length of input_ids:  940
-length of input_ids:  664
-length of input_ids:  767
-length of input_ids:  907
-length of input_ids:  714
-length of input_ids:  818
-length of input_ids:  491
-length of input_ids:  565
-length of input_ids:  613
-length of input_ids:  563
-length of input_ids:  611
-length of input_ids:  549
-length of input_ids:  719
-length of input_ids:  787
-length of input_ids:  930
-length of input_ids:  798
-length of input_ids:  930
-length of input_ids:  817
-length of input_ids:  765
-length of input_ids:  569
-length of input_ids:  595
-length of input_ids:  987
-length of input_ids:  599
-length of input_ids:  593
-length of input_ids:  440
-length of input_ids:  416
-length of input_ids:  444
-length of input_ids:  569
-length of input_ids:  694
-length of input_ids:  705
-length of input_ids:  598
-length of input_ids:  478
-length of input_ids:  571
-length of input_ids:  541
-length of input_ids:  687
-length of input_ids:  487
-length of input_ids:  964
-length of input_ids:  530
-length of input_ids:  570
-length of input_ids:  599
-length of input_ids:  688
-length of input_ids:  459
-length of input_ids:  807
-length of input_ids:  777
-length of input_ids:  684
-length of input_ids:  727
-length of input_ids:  619
-length of input_ids:  455
-length of input_ids:  483
-length of input_ids:  460
-length of input_ids:  584
-length of input_ids:  446
-length of input_ids:  698
-length of input_ids:  750
-length of input_ids:  633
-length of input_ids:  503
-length of input_ids:  525
-length of input_ids:  410
-length of input_ids:  708
-length of input_ids:  728
-length of input_ids:  587
-length of input_ids:  505
-length of input_ids:  720
-length of input_ids:  658
-length of input_ids:  842
-length of input_ids:  714
-length of input_ids:  654
-length of input_ids:  378
-length of input_ids:  521
-length of input_ids:  727
-length of input_ids:  733
-length of input_ids:  588
-length of input_ids:  510
-length of input_ids:  390
-length of input_ids:  386
-length of input_ids:  478
-length of input_ids:  632
-length of input_ids:  626
-length of input_ids:  728
-length of input_ids:  634
-length of input_ids:  651
-length of input_ids:  598
-length of input_ids:  522
-length of input_ids:  623
-length of input_ids:  413
-length of input_ids:  763
-length of input_ids:  795
-length of input_ids:  1182
-length of input_ids:  691
-length of input_ids:  775
-length of input_ids:  744
-length of input_ids:  981
-length of input_ids:  691
-length of input_ids:  654
-length of input_ids:  816
-length of input_ids:  916
-length of input_ids:  740
-length of input_ids:  791
-length of input_ids:  766
-length of input_ids:  533
-length of input_ids:  668
-Map:  57%|█████▋    | 325/568 [00:00<00:00, 907.17 examples/s]Map:  74%|███████▎  | 418/568 [00:00<00:00, 909.36 examples/s]Map:  90%|████████▉ | 511/568 [00:00<00:00, 912.93 examples/s]                                                              wandb: Currently logged in as: samlhuillier. Use `wandb login --relogin` to force relogin
-wandb: wandb version 0.15.11 is available!  To upgrade, please run:
-wandb:  $ pip install wandb --upgrade
-wandb: Tracking run with wandb version 0.15.10
-wandb: Run data is saved locally in /root/finetune-llm-for-rag/training-code/wandb/run-20230922_194127-48c4j194
-wandb: Run `wandb offline` to turn off syncing.
-wandb: Syncing run codellama-2023-09-22-19-41
-wandb: ⭐️ View project at https://wandb.ai/samlhuillier/sixth-contextlen-1500-rag-sql-codellama7b
-wandb: 🚀 View run at https://wandb.ai/samlhuillier/sixth-contextlen-1500-rag-sql-codellama7b/runs/48c4j194
-length of input_ids:  558
-length of input_ids:  823
-length of input_ids:  663
-length of input_ids:  604
-length of input_ids:  462
-length of input_ids:  603
-length of input_ids:  695
-length of input_ids:  579
-length of input_ids:  926
-length of input_ids:  737
-length of input_ids:  463
-length of input_ids:  565
-length of input_ids:  665
-length of input_ids:  391
-length of input_ids:  432
-length of input_ids:  463
-length of input_ids:  544
-length of input_ids:  517
-length of input_ids:  526
-length of input_ids:  620
-length of input_ids:  716
-length of input_ids:  716
-length of input_ids:  549
-length of input_ids:  569
-length of input_ids:  572
-length of input_ids:  690
-length of input_ids:  707
-length of input_ids:  701
-length of input_ids:  707
-length of input_ids:  623
-length of input_ids:  700
-length of input_ids:  772
-length of input_ids:  768
-length of input_ids:  697
-length of input_ids:  412
-length of input_ids:  576
-length of input_ids:  587
-length of input_ids:  667
-length of input_ids:  598
-length of input_ids:  783
-length of input_ids:  636
-length of input_ids:  520
-length of input_ids:  619
-length of input_ids:  641
-length of input_ids:  469
-length of input_ids:  685
-length of input_ids:  638
-length of input_ids:  599
-length of input_ids:  637
-length of input_ids:  574
-length of input_ids:  721
-length of input_ids:  654
-length of input_ids:  645
-length of input_ids:  790
-length of input_ids:  562
-length of input_ids:  650
-length of input_ids:  551
-length of input_ids:  434
-length of input_ids:  428
-length of input_ids:  428
-length of input_ids:  466
-length of input_ids:  449
-length of input_ids:  612
-length of input_ids:  401
-length of input_ids:  389
-length of input_ids:  598
-length of input_ids:  427
-length of input_ids:  576
-length of input_ids:  550
-length of input_ids:  524
-length of input_ids:  496
-length of input_ids:  634
-length of input_ids:  640
-length of input_ids:  479
-length of input_ids:  486
-length of input_ids:  535
-length of input_ids:  631
-length of input_ids:  604
-length of input_ids:  617
-length of input_ids:  468
-length of input_ids:  445
-length of input_ids:  406
-length of input_ids:  412
-length of input_ids:  509
-length of input_ids:  624
-length of input_ids:  575
-length of input_ids:  423
-length of input_ids:  428
-length of input_ids:  559
-length of input_ids:  518
-length of input_ids:  539
-length of input_ids:  417
-length of input_ids:  510
-length of input_ids:  564
-length of input_ids:  474
-length of input_ids:  384
-length of input_ids:  440
-length of input_ids:  496
-length of input_ids:  521
-length of input_ids:  518
-length of input_ids:  612
-length of input_ids:  577
-length of input_ids:  690
-length of input_ids:  420
-length of input_ids:  543
-length of input_ids:  662
-length of input_ids:  663
-length of input_ids:  501
-length of input_ids:  609
-length of input_ids:  625
-length of input_ids:  505
-length of input_ids:  556
-length of input_ids:  485
-length of input_ids:  648
-length of input_ids:  623
-length of input_ids:  475
-length of input_ids:  562
-length of input_ids:  512
-length of input_ids:  519
-length of input_ids:  521
-length of input_ids:  490
-length of input_ids:  637
-length of input_ids:  556
-length of input_ids:  682
-length of input_ids:  549
-length of input_ids:  648
-length of input_ids:  503
-length of input_ids:  477
-length of input_ids:  489
-length of input_ids:  548
-length of input_ids:  544
-length of input_ids:  630
-length of input_ids:  474
-length of input_ids:  469
-length of input_ids:  477
-length of input_ids:  446
-length of input_ids:  580
-length of input_ids:  541
-length of input_ids:  597
-length of input_ids:  643
-length of input_ids:  421
-length of input_ids:  438
-length of input_ids:  466
-length of input_ids:  467
-length of input_ids:  332
-length of input_ids:  463
-length of input_ids:  484
-length of input_ids:  748
-length of input_ids:  469
-length of input_ids:  423
-length of input_ids:  432
-length of input_ids:  539
-length of input_ids:  535
-length of input_ids:  906
-length of input_ids:  879
-length of input_ids:  894
-length of input_ids:  884
-length of input_ids:  593
-length of input_ids:  723
-length of input_ids:  637
-length of input_ids:  598
-length of input_ids:  788
-length of input_ids:  685
-length of input_ids:  858
-length of input_ids:  355
-length of input_ids:  626
-length of input_ids:  402
-length of input_ids:  644
-length of input_ids:  517
-length of input_ids:  472
-length of input_ids:  373
-length of input_ids:  521
-length of input_ids:  596
-length of input_ids:  554
-length of input_ids:  477
-length of input_ids:  507
-length of input_ids:  802
-length of input_ids:  725
-length of input_ids:  677
-length of input_ids:  620
-length of input_ids:  553
-length of input_ids:  654
-length of input_ids:  567
-length of input_ids:  651
-length of input_ids:  481
-length of input_ids:  475
-length of input_ids:  724
-length of input_ids:  579
-length of input_ids:  652
-length of input_ids:  767
-length of input_ids:  620
-length of input_ids:  694
-length of input_ids:  521
-length of input_ids:  579
-length of input_ids:  784
-length of input_ids:  951
-length of input_ids:  625
-length of input_ids:  754
-length of input_ids:  765
-length of input_ids:  847
-length of input_ids:  507
-length of input_ids:  1015
-length of input_ids:  840
-length of input_ids:  859
-length of input_ids:  683
-length of input_ids:  925
-length of input_ids:  672
-length of input_ids:  637
-length of input_ids:  629
-length of input_ids:  521
-length of input_ids:  583
-length of input_ids:  800
-length of input_ids:  603
-length of input_ids:  541
-length of input_ids:  646
-length of input_ids:  572
-length of input_ids:  454
-length of input_ids:  590
-length of input_ids:  551
-length of input_ids:  753
-length of input_ids:  555
-length of input_ids:  621
-length of input_ids:  473
-length of input_ids:  527
-length of input_ids:  535
-length of input_ids:  722
-length of input_ids:  663
-length of input_ids:  504
-length of input_ids:  501
-length of input_ids:  521
-length of input_ids:  476
-length of input_ids:  612
-length of input_ids:  430
-length of input_ids:  773
-length of input_ids:  562
-length of input_ids:  472
-length of input_ids:  665
-length of input_ids:  495
-length of input_ids:  676
-length of input_ids:  464
-length of input_ids:  705
-length of input_ids:  570
-length of input_ids:  466
-length of input_ids:  700
-length of input_ids:  750
-length of input_ids:  712
-length of input_ids:  694
-length of input_ids:  690
-length of input_ids:  614
-length of input_ids:  362
-length of input_ids:  879
-length of input_ids:  574
-length of input_ids:  582
-compiling the model
-  0%|          | 0/600 [00:00<?, ?it/s]You're using a CodeLlamaTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
-  0%|          | 1/600 [01:54<19:07:42, 114.96s/it]  0%|          | 2/600 [03:21<16:16:43, 98.00s/it]   0%|          | 3/600 [04:37<14:38:38, 88.31s/it]  1%|          | 4/600 [05:46<13:18:51, 80.42s/it]  1%|          | 5/600 [06:47<12:09:09, 73.53s/it]  1%|          | 6/600 [07:42<11:06:05, 67.28s/it]  1%|          | 7/600 [08:30<10:02:07, 60.92s/it]  1%|▏         | 8/600 [10:23<12:46:03, 77.64s/it]  2%|▏         | 9/600 [11:52<13:17:21, 80.95s/it]  2%|▏         | 10/600 [13:09<13:06:16, 79.96s/it]                                                     2%|▏         | 10/600 [13:09<13:06:16, 79.96s/it]  2%|▏         | 11/600 [14:19<12:35:17, 76.94s/it]  2%|▏         | 12/600 [15:22<11:51:09, 72.57s/it]  2%|▏         | 13/600 [16:18<11:00:36, 67.52s/it]  2%|▏         | 14/600 [17:06<10:00:52, 61.52s/it]  2%|▎         | 15/600 [19:01<12:37:28, 77.69s/it]  3%|▎         | 16/600 [20:27<13:01:23, 80.28s/it]  3%|▎         | 17/600 [21:44<12:49:59, 79.24s/it]  3%|▎         | 18/600 [22:53<12:19:47, 76.27s/it]  3%|▎         | 19/600 [23:55<11:37:17, 72.01s/it]  3%|▎         | 20/600 [24:51<10:48:28, 67.08s/it]                                                     3%|▎         | 20/600 [24:51<10:48:28, 67.08s/it]{'loss': 0.8852, 'learning_rate': 2.6999999999999996e-05, 'epoch': 0.32}
-{'loss': 0.9106, 'learning_rate': 5.6999999999999996e-05, 'epoch': 0.65}
-
-  0%|          | 0/71 [00:00<?, ?it/s][A
-  3%|▎         | 2/71 [00:01<01:07,  1.02it/s][A
-  4%|▍         | 3/71 [00:04<01:39,  1.46s/it][A
-  6%|▌         | 4/71 [00:05<01:41,  1.51s/it][A
-  7%|▋         | 5/71 [00:07<01:52,  1.70s/it][A
-  8%|▊         | 6/71 [00:10<02:07,  1.97s/it][A
- 10%|▉         | 7/71 [00:11<01:59,  1.87s/it][A
- 11%|█▏        | 8/71 [00:13<01:49,  1.73s/it][A
- 13%|█▎        | 9/71 [00:14<01:40,  1.62s/it][A
- 14%|█▍        | 10/71 [00:16<01:34,  1.55s/it][A
- 15%|█▌        | 11/71 [00:18<01:41,  1.69s/it][A
- 17%|█▋        | 12/71 [00:20<01:46,  1.80s/it][A
- 18%|█▊        | 13/71 [00:21<01:41,  1.74s/it][A
- 20%|█▉        | 14/71 [00:23<01:30,  1.60s/it][A
- 21%|██        | 15/71 [00:24<01:31,  1.64s/it][A
- 23%|██▎       | 16/71 [00:26<01:23,  1.53s/it][A
- 24%|██▍       | 17/71 [00:27<01:25,  1.58s/it][A
- 25%|██▌       | 18/71 [00:29<01:24,  1.59s/it][A
- 27%|██▋       | 19/71 [00:31<01:24,  1.62s/it][A
- 28%|██▊       | 20/71 [00:32<01:25,  1.67s/it][A
- 30%|██▉       | 21/71 [00:34<01:21,  1.64s/it][A
- 31%|███       | 22/71 [00:35<01:14,  1.52s/it][A
- 32%|███▏      | 23/71 [00:36<01:08,  1.43s/it][A
- 34%|███▍      | 24/71 [00:38<01:07,  1.43s/it][A
- 35%|███▌      | 25/71 [00:39<01:08,  1.49s/it][A
- 37%|███▋      | 26/71 [00:41<01:05,  1.45s/it][A
- 38%|███▊      | 27/71 [00:43<01:12,  1.64s/it][A
- 39%|███▉      | 28/71 [00:45<01:15,  1.75s/it][A
- 41%|████      | 29/71 [00:47<01:17,  1.86s/it][A
- 42%|████▏     | 30/71 [00:49<01:20,  1.97s/it][A
- 44%|████▎     | 31/71 [00:51<01:13,  1.83s/it][A
- 45%|████▌     | 32/71 [00:53<01:15,  1.93s/it][A
- 46%|████▋     | 33/71 [00:55<01:11,  1.88s/it][A
- 48%|████▊     | 34/71 [00:56<01:06,  1.80s/it][A
- 49%|████▉     | 35/71 [00:58<01:05,  1.82s/it][A
- 51%|█████     | 36/71 [01:00<01:00,  1.74s/it][A
- 52%|█████▏    | 37/71 [01:01<00:57,  1.68s/it][A
- 54%|█████▎    | 38/71 [01:04<01:05,  2.00s/it][A
- 55%|█████▍    | 39/71 [01:06<01:06,  2.06s/it][A
- 56%|█████▋    | 40/71 [01:08<01:01,  1.98s/it][A
- 58%|█████▊    | 41/71 [01:10<01:00,  2.01s/it][A
- 59%|█████▉    | 42/71 [01:12<00:54,  1.86s/it][A
- 61%|██████    | 43/71 [01:13<00:49,  1.76s/it][A
- 62%|██████▏   | 44/71 [01:15<00:46,  1.74s/it][A
- 63%|██████▎   | 45/71 [01:16<00:44,  1.72s/it][A
- 65%|██████▍   | 46/71 [01:18<00:41,  1.67s/it][A
- 66%|██████▌   | 47/71 [01:20<00:40,  1.68s/it][A
- 68%|██████▊   | 48/71 [01:21<00:35,  1.56s/it][A
- 69%|██████▉   | 49/71 [01:22<00:32,  1.49s/it][A
- 70%|███████   | 50/71 [01:24<00:30,  1.43s/it][A
- 72%|███████▏  | 51/71 [01:25<00:27,  1.35s/it][A
- 73%|███████▎  | 52/71 [01:26<00:25,  1.33s/it][A
- 75%|███████▍  | 53/71 [01:28<00:24,  1.37s/it][A
- 76%|███████▌  | 54/71 [01:29<00:23,  1.36s/it][A
- 77%|███████▋  | 55/71 [01:30<00:22,  1.38s/it][A
- 79%|███████▉  | 56/71 [01:32<00:20,  1.37s/it][A
- 80%|████████  | 57/71 [01:33<00:19,  1.36s/it][A
- 82%|████████▏ | 58/71 [01:35<00:18,  1.43s/it][A
- 83%|████████▎ | 59/71 [01:37<00:19,  1.61s/it][A
- 85%|████████▍ | 60/71 [01:38<00:18,  1.69s/it][A
- 86%|████████▌ | 61/71 [01:40<00:15,  1.59s/it][A
- 87%|████████▋ | 62/71 [01:42<00:14,  1.64s/it][A
- 89%|████████▊ | 63/71 [01:43<00:12,  1.62s/it][A
- 90%|█████████ | 64/71 [01:45<00:12,  1.77s/it][A
- 92%|█████████▏| 65/71 [01:48<00:11,  1.93s/it][A
- 93%|█████████▎| 66/71 [01:50<00:09,  1.97s/it][A
- 94%|█████████▍| 67/71 [01:51<00:07,  1.87s/it][A
- 96%|█████████▌| 68/71 [01:53<00:05,  1.78s/it][A
- 97%|█████████▋| 69/71 [01:55<00:03,  1.75s/it][A
- 99%|█████████▊| 70/71 [01:56<00:01,  1.70s/it][A
-100%|██████████| 71/71 [01:58<00:00,  1.77s/it][A                                                   
-                                               [A  3%|▎         | 20/600 [26:51<10:48:28, 67.08s/it]
-100%|██████████| 71/71 [01:58<00:00,  1.77s/it][A
-                                               [A  4%|▎         | 21/600 [27:39<15:38:46, 97.28s/it]  4%|▎         | 22/600 [29:32<16:22:16, 101.97s/it]  4%|▍         | 23/600 [30:58<15:36:26, 97.38s/it]   4%|▍         | 24/600 [32:14<14:33:48, 91.02s/it]  4%|▍         | 25/600 [33:23<13:28:06, 84.32s/it]  4%|▍         | 26/600 [34:25<12:21:32, 77.51s/it]  4%|▍         | 27/600 [35:20<11:17:10, 70.91s/it]  5%|▍         | 28/600 [36:08<10:09:30, 63.93s/it]  5%|▍         | 29/600 [37:51<12:00:53, 75.75s/it]  5%|▌         | 30/600 [39:01<11:41:50, 73.88s/it]                                                     5%|▌         | 30/600 [39:01<11:41:50, 73.88s/it]  5%|▌         | 31/600 [39:50<10:31:54, 66.63s/it]  5%|▌         | 32/600 [41:44<12:43:02, 80.60s/it]  6%|▌         | 33/600 [43:11<13:02:05, 82.76s/it]wandb: Network error (ReadTimeout), entering retry loop.
-  6%|▌         | 34/600 [44:30<12:47:52, 81.40s/it]  6%|▌         | 35/600 [45:40<12:15:46, 78.14s/it]  6%|▌         | 36/600 [46:43<11:31:50, 73.60s/it]  6%|▌         | 37/600 [47:39<10:40:34, 68.27s/it]  6%|▋         | 38/600 [48:27<9:41:11, 62.05s/it]   6%|▋         | 39/600 [50:19<12:00:40, 77.08s/it]

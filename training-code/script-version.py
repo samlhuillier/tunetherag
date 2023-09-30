@@ -54,8 +54,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments,
 
 # %%
 from datasets import load_dataset
-train_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-train-with-2-examples.jsonl', split='train')
-eval_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-validation-with-2-examples.jsonl', split='train')
+train_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-train-with-1-examples-random-False-emb_fn-default-emb-fn.jsonl', split='train')
+eval_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-validation-with-1-examples-random-False-emb_fn-default-emb-fn.jsonl', split='train')
 print(train_dataset)
 print(eval_dataset)
 # %% [markdown]
@@ -98,12 +98,12 @@ tokenizer.padding_side = "left"
 # Setup the tokenize function to make labels and input_ids the same. This is basically what [self-supervised fine-tuning](https://neptune.ai/blog/self-supervised-learning) is:
 
 # %%
-def tokenize(data_point):
-    prompt = data_point["full_prompt"]
+def tokenize(prompt):
+    # prompt = data_point["full_prompt"]
     result = tokenizer(
         prompt,
         truncation=True,
-        max_length=700,
+        max_length=670,
         padding=False,
         return_tensors=None,
     )
@@ -118,9 +118,9 @@ def tokenize(data_point):
 
 # %%
 def generate_and_tokenize_prompt(data_point):
-    # full_prompt = data_point["full_prompt"]
+    full_prompt = data_point["full_prompt"]
     # print(full_prompt)
-    return tokenize(data_point)
+    return tokenize(full_prompt)
 
 # %% [markdown]
 # Reformat to prompt and tokenize each sample:
@@ -155,7 +155,7 @@ model = get_peft_model(model, config)
 # Optional stuff to setup Weights and Biases to view training graphs:
 
 # %%
-wandb_project = "testing-insights"
+wandb_project = "new-fix-chroma-bug-tune-for-rag"
 if len(wandb_project) > 0:
     os.environ["WANDB_PROJECT"] = wandb_project
 
@@ -172,36 +172,9 @@ if torch.cuda.device_count() > 1:
 
 # %%
 batch_size = 128
-per_device_train_batch_size = 8
+per_device_train_batch_size = 32
 gradient_accumulation_steps = batch_size // per_device_train_batch_size
-output_dir = "testing-insights"
-
-class PrintBatchCallback(TrainerCallback):
-    def on_train_begin(self, args, state, control, **kwargs):
-        logging.set_verbosity_info()  # Set logging level to info to see the printed messages
-    def on_step_begin(self, args, state, control, model=None, train_dataloader=None, optimizer=None, **kwargs):
-        # Access the batch data from the optimizer's closure
-        closure = optimizer.state["closure"]
-        print("running on_step_begin")
-        if closure:
-            batch = closure().closure_cache
-            # The batch is a tuple where the first element contains the batch data
-            inputs = batch[0]
-            
-            # Decode the input_ids in the batch
-            decoded_samples = tokenizer.batch_decode(inputs["input_ids"], skip_special_tokens=True)
-            
-            # Here, we'll print the first sample in the batch as an example
-            print(f"Processing batch: {state.global_step}, First sample: {decoded_samples[0]}")
-    # def on_step_begin(self, args, state, control, model, **kwargs):
-    #     print("kwargs are: ", kwargs)
-    #     batch = kwargs["batch"]
-    #     # Decode the input_ids in the batch
-    #     decoded_samples = tokenizer.batch_decode(batch["input_ids"], skip_special_tokens=True)
-    #     print("YOOOOO")
-    #     # Here, we'll print the first sample in the batch as an example
-    #     logging.info(f"Processing batch: {state.global_step}, First sample: {decoded_samples[0]}")
-
+output_dir = "1-example-new-fix-chroma-bug-tune-for-rag"
 
 training_args = TrainingArguments(
         per_device_train_batch_size=per_device_train_batch_size,
@@ -222,7 +195,7 @@ training_args = TrainingArguments(
         # ddp_find_unused_parameters=False if ddp else None,
         group_by_length=True, # group sequences of roughly the same length together to speed up training
         report_to="wandb", # if use_wandb else "none",
-        run_name=f"2-examples-sql-codellama7b-rag-test-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
+        run_name=f"1-example-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
     )
 
 trainer = Trainer(
@@ -233,7 +206,6 @@ trainer = Trainer(
     data_collator=DataCollatorForSeq2Seq(
         tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
     ),
-    callbacks=[PrintBatchCallback()],
 )
 
 # %% [markdown]
