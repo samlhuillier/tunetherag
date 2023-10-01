@@ -55,11 +55,11 @@ def get_examples(knowledge_base, data_point, n_examples, randomize=False):
                 n_results=n_examples,
                 db_id=data_point["db_id"],
             )["metadatas"][0]
-        # print(
-        #     data_point["question"],
-        #     " -> ",
-        #     formatted_examples[0]["question"],
-        # )
+        print(
+            data_point["question"],
+            " -> ",
+            formatted_examples[0]["question"],
+        )
         print(
             data_point["db_id"],
             " -> ",
@@ -115,16 +115,17 @@ def augment_dataset_with_prompts(
         emb_fn_string = ""
         if not randomize:
             emb_fn_string = f"-emb_fn-{embedding_function}"
+
         filename = f"{dataset_name.replace('/', '-')}-{split}-with-{n_examples}-examples-random-{randomize}{emb_fn_string}.jsonl"
 
         # Save the dataset as a JSON file
         dataset.to_json(filename)
 
 
-# openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-#     api_key="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",
-#     model_name="text-embedding-ada-002",
-# )
+openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+    api_key="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",
+    model_name="text-embedding-ada-002",
+)
 
 # print(openai_ef._model_name)
 # abc = openai_ef(
@@ -141,7 +142,7 @@ print(default_ef.model)
 # so first we need to generate the knowledge_base
 dataset_name = "samlhuillier/sql-create-context-spider-intersect"
 knowledge_base = generate_knowledge_base_from_hf_dataset(
-    dataset_name, "question", default_ef
+    dataset_name, "question", openai_ef
 )
 print(knowledge_base.count())
 print(get_embedding_model_name(knowledge_base._embedding_function))
