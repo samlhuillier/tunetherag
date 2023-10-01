@@ -53,7 +53,7 @@ def get_examples(knowledge_base, data_point, n_examples, randomize=False):
                 data_point["question"],
                 "question",
                 n_results=n_examples,
-                db_id=data_point["db_id"],
+                # db_id=data_point["db_id"],
             )["metadatas"][0]
         print(
             data_point["question"],
