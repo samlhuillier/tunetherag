@@ -13,3 +13,5 @@ embeddings/__pycache__/
 embeddings/__pycache__/chroma_funcs.cpython-310.pyc
 embeddings/__pycache__/chroma_funcs.cpython-310.pyc
 training-code/1-example-new-fix-chroma-bug-tune-for-rag
+training-code/1-example-new-fix-chroma-bug-tune-for-rag-different-db_id
+training-code/1-random-example-new-fix-chroma-bug-tune-for-rag
