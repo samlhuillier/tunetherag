@@ -8,21 +8,9 @@ from datasets import load_dataset
 from chromadb.utils import embedding_functions
 
 
-def format_rag_examples(examples):
-    if len(examples) == 1:
-        return f"""
-Given the following example:
-### Input:
-{examples[0]["question"]}
-
-### Context:
-{examples[0]["context"]}
-
-### Response:
-{examples[0]["answer"]}
-"""
-    formatted_examples = "\n".join(
-        f"""Example {j+1}:
+def format_rag_sql_examples(examples):
+    def format_example(i, example):
+        return f"""Example {i+1}:
 ### Input:
 {example["question"]}
 
@@ -32,11 +20,19 @@ Given the following example:
 ### Response:
 {example["answer"]}
 """
-        for j, example in enumerate(examples)
+
+    formatted_examples = "\n".join(
+        format_example(i, example) for i, example in enumerate(examples)
+    )
+
+    prefix = (
+        "Given the following example:"
+        if len(examples) == 1
+        else "Given the following examples:"
     )
 
     return f"""
-Given the following examples:
+{prefix}
 {formatted_examples}"""
 
 
@@ -69,7 +65,7 @@ def get_examples(knowledge_base, data_point, n_examples, randomize=False):
             " -> ",
             formatted_examples[1]["db_id"],
         )
-        formatted_examples = format_rag_examples(formatted_examples)
+        formatted_examples = format_rag_sql_examples(formatted_examples)
     return formatted_examples
 
 
