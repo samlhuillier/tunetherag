@@ -6,89 +6,17 @@ from embeddings.chroma_funcs import (
 )
 from datasets import load_dataset
 from chromadb.utils import embedding_functions
-
-
-def format_rag_sql_examples(examples):
-    def format_example(i, example):
-        return f"""Example {i+1}:
-### Input:
-{example["question"]}
-
-### Context:
-{example["context"]}
-
-### Response:
-{example["answer"]}
-"""
-
-    formatted_examples = "\n".join(
-        format_example(i, example) for i, example in enumerate(examples)
-    )
-
-    prefix = (
-        "Given the following example:"
-        if len(examples) == 1
-        else "Given the following examples:"
-    )
-
-    return f"""
-{prefix}
-{formatted_examples}"""
-
-
-def get_examples(knowledge_base, data_point, n_examples, randomize=False):
-    formatted_examples = ""
-    if n_examples > 0:
-        if randomize:
-            formatted_examples = get_random_entries(knowledge_base, n_examples)[
-                "metadatas"
-            ]
-        else:
-            formatted_examples = get_closest_entries(
-                knowledge_base,
-                data_point["question"],
-                "question",
-                n_results=n_examples,
-                db_id=data_point["db_id"],
-            )["metadatas"][0]
-        print(
-            data_point["question"],
-            " -> ",
-            formatted_examples[0]["question"],
-            " -> ",
-            formatted_examples[1]["question"],
-        )
-        print(
-            data_point["db_id"],
-            " -> ",
-            formatted_examples[0]["db_id"],
-            " -> ",
-            formatted_examples[1]["db_id"],
-        )
-        formatted_examples = format_rag_sql_examples(formatted_examples)
-    return formatted_examples
-
-
-def generate_rag_sql_prompt(knowledge_base, data_point, n_examples, randomize=False):
-    formatted_examples = get_examples(knowledge_base, data_point, n_examples, randomize)
-
-    inference_prompt = f"""You are a powerful text-to-SQL model. Your job is to answer questions about a database. You are given a question and context regarding one or more tables. You must output the SQL query that answers the question.
-{formatted_examples}
-Please generate the SQL query that answers the following:
-### Input:
-{data_point["question"]}
-
-### Context:
-{data_point["context"]}
-
-### Response:"""
-    full_prompt = f"{inference_prompt}\n{data_point['answer']}"
-    return full_prompt, inference_prompt
+from prompt_setup import (
+    # format_rag_sql_examples,
+    # get_sql_examples,
+    generate_rag_sql_prompt,
+    generate_rag_func_representation_prompt,
+)
 
 
 def add_prompt_features(example, knowledge_base, n_examples, randomize=False):
     # Add your logic to generate the extra feature here
-    full_prompt, inference_prompt = generate_rag_sql_prompt(
+    full_prompt, inference_prompt = generate_rag_func_representation_prompt(
         knowledge_base, example, n_examples, randomize
     )
     example["full_prompt"] = full_prompt
@@ -102,6 +30,9 @@ def augment_dataset_with_prompts(
     dataset_dict = load_dataset(dataset_name)
 
     for split, dataset in dataset_dict.items():
+        split = "test"
+        dataset = load_dataset(dataset_name, split=split)
+        print(dataset)
         dataset = dataset.map(
             lambda example: add_prompt_features(
                 example, knowledge_base, n_examples=n_examples, randomize=randomize
@@ -140,16 +71,16 @@ print(default_ef.model)
 
 # %%
 # so first we need to generate the knowledge_base
-dataset_name = "samlhuillier/sql-create-context-spider-intersect"
+dataset_name = "gem/viggo"
 knowledge_base = generate_knowledge_base_from_hf_dataset(
-    dataset_name, "question", openai_ef
+    dataset_name, "target", openai_ef
 )
 print(knowledge_base.count())
 print(get_embedding_model_name(knowledge_base._embedding_function))
 # entries = get_random_entries(knowledge_base, 1)
 # print(entries)
 augment_dataset_with_prompts(
-    dataset_name, knowledge_base, n_examples=2, randomize=False
+    dataset_name, knowledge_base, n_examples=1, randomize=False
 )
 
 

@@ -30,6 +30,12 @@ def get_embedding_model_name(emb_fn):
     return model_name
 
 
+def remove_references(entry):
+    if "references" in entry:
+        del entry["references"]
+    return entry
+
+
 def generate_knowledge_base_from_hf_dataset(
     hf_dataset_name, embed_feature, emb_fn, dataset_split="train"
 ):
@@ -48,6 +54,8 @@ def generate_knowledge_base_from_hf_dataset(
 
     if collection.count() == 0:
         dataset = load_dataset(hf_dataset_name, split=dataset_split)
+        dataset = dataset.map(remove_references)
+
         chunk_size = 300
 
         # Initialize a global counter for unique IDs
@@ -62,7 +70,7 @@ def generate_knowledge_base_from_hf_dataset(
 
             # Update the global counter
             global_counter += len(chunk)
-
+            print(metadatas[0])
             collection.add(
                 documents=documents,
                 metadatas=metadatas,
@@ -83,13 +91,13 @@ def get_closest_entries(
     results = collection.query(
         query_texts=[query],  # TODO: look into what multiple queries will do here.
         n_results=n_results,
-        # where={embed_feature: {"$ne": query}},  # exact match is train/val contamination
-        where={
-            "$and": [
-                {embed_feature: {"$ne": query}},
-                {"db_id": {"$ne": db_id}},
-            ]
-        }
+        where={embed_feature: {"$ne": query}},  # exact match is train/val contamination
+        # where={
+        #     "$and": [
+        #         {embed_feature: {"$ne": query}},
+        #         {"db_id": {"$ne": db_id}},
+        #     ]
+        # }
         # TODO: test this:
         # where_document={"$ne": query},  # exact match is train/val contamination
     )
