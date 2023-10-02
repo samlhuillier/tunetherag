@@ -54,8 +54,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments,
 
 # %%
 from datasets import load_dataset
-train_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-train-with-1-examples-random-False-emb_fn-default-emb-fn-different-db_id.jsonl', split='train')
-eval_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-validation-with-1-examples-random-False-emb_fn-default-emb-fn-different-db_id.jsonl', split='train')
+train_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/viggo/gem-viggo-train-with-1-examples-random-False-emb_fn-text-embedding-ada-002.jsonl', split='train')
+eval_dataset = load_dataset('json', data_files='/home/sam/finetune-llm-for-rag/datasets/viggo/gem-viggo-test-with-1-examples-random-False-emb_fn-text-embedding-ada-002.jsonl', split='train')
 print(train_dataset)
 print(eval_dataset)
 # %% [markdown]
@@ -103,7 +103,7 @@ def tokenize(prompt):
     result = tokenizer(
         prompt,
         truncation=True,
-        max_length=650,
+        max_length=700,
         padding=False,
         return_tensors=None,
     )
@@ -174,7 +174,7 @@ if torch.cuda.device_count() > 1:
 batch_size = 128
 per_device_train_batch_size = 32
 gradient_accumulation_steps = batch_size // per_device_train_batch_size
-output_dir = "1-example-new-fix-chroma-bug-tune-for-rag-different-db_id"
+output_dir = "2-examples-new-fix-chroma-bug-tune-for-rag-different-db_id-openai-embedding-ada-002"
 
 training_args = TrainingArguments(
         per_device_train_batch_size=per_device_train_batch_size,
@@ -195,7 +195,7 @@ training_args = TrainingArguments(
         # ddp_find_unused_parameters=False if ddp else None,
         group_by_length=True, # group sequences of roughly the same length together to speed up training
         report_to="wandb", # if use_wandb else "none",
-        run_name=f"1-example-diff-db_id-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
+        run_name=f"2-examples-diff-db_id-openai-embedding-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
     )
 
 trainer = Trainer(

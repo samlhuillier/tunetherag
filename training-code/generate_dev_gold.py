@@ -10,7 +10,7 @@ import json
 #         # print(data)
 
 data = []
-with open('/home/sam/finetune-llm-for-rag/datasets/sql/MiniLM-L6/samlhuillier-sql-create-context-spider-intersect-validation-with-1-examples-random-False-emb_fn-default-emb-fn-different-db_id.jsonl', 'r') as f:
+with open('/home/sam/finetune-llm-for-rag/datasets/sql/openai/samlhuillier-sql-create-context-spider-intersect-validation-with-2-examples-random-False-emb_fn-text-embedding-ada-002-diff-db_id.jsonl', 'r') as f:
     for line in f:
         data.append(json.loads(line))
 # print(data_list[2])
@@ -37,16 +37,16 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",
 )
 from peft import PeftModel
-model = PeftModel.from_pretrained(model, "/home/sam/finetune-llm-for-rag/training-code/1-example-new-fix-chroma-bug-tune-for-rag-different-db_id/checkpoint-210")
+model = PeftModel.from_pretrained(model, "/home/sam/finetune-llm-for-rag/training-code/2-examples-new-fix-chroma-bug-tune-for-rag-different-db_id-openai-embedding-ada-002/checkpoint-310")
 tokenizer = AutoTokenizer.from_pretrained("codellama/CodeLlama-7b-hf")
 
 tokenizer.pad_token = tokenizer.eos_token
 
-batch_size = 64  # You can adjust the batch size based on your GPU capacity
+batch_size = 44  # You can adjust the batch size based on your GPU capacity
 outputs = []
-
+print("length of prompts: ", len(prompts))
 model.eval()
-with torch.no_grad(), open("new-fix-chroma-bug-one-example-rag-diff-db_id-yes-finetune-codellama7B-checkpoint-210.txt", "a") as f:
+with torch.no_grad(), open("new-fix-chroma-bug-two-examples-rag-diff-db_id-yes-finetune-codellama7B-openai-embedding-checkpoint-310", "a") as f:
     for i in range(0, len(prompts), batch_size):
         print("i is: ", i)
         batch_inputs = prompts[i : i + batch_size]
