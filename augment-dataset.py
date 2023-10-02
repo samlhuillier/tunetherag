@@ -30,8 +30,6 @@ def augment_dataset_with_prompts(
     dataset_dict = load_dataset(dataset_name)
 
     for split, dataset in dataset_dict.items():
-        split = "test"
-        dataset = load_dataset(dataset_name, split=split)
         print(dataset)
         dataset = dataset.map(
             lambda example: add_prompt_features(
@@ -80,7 +78,7 @@ print(get_embedding_model_name(knowledge_base._embedding_function))
 # entries = get_random_entries(knowledge_base, 1)
 # print(entries)
 augment_dataset_with_prompts(
-    dataset_name, knowledge_base, n_examples=1, randomize=False
+    dataset_name, knowledge_base, n_examples=0, randomize=False
 )
 
 
