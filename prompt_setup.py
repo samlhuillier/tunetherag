@@ -35,29 +35,29 @@ def format_rag_sql_examples(examples):
 def get_examples_from_db(
     knowledge_base, data_point, n_examples, embed_feature, randomize=False
 ):
-    formatted_examples = ""
+    examples = []
     if n_examples > 0:
         if randomize:
-            formatted_examples = get_random_entries(knowledge_base, n_examples)[
-                "metadatas"
-            ]
+            examples = get_random_entries(knowledge_base, n_examples)["metadatas"]
         else:
-            formatted_examples = get_closest_entries(
+            examples = get_closest_entries(
                 knowledge_base,
                 data_point[embed_feature],
                 embed_feature,
                 n_results=n_examples,
             )["metadatas"][0]
-        print(data_point[embed_feature], " -> ", formatted_examples[0][embed_feature])
-    return formatted_examples
+        print(data_point[embed_feature], " -> ", examples[0][embed_feature])
+    return examples
 
 
 def generate_rag_sql_prompt(knowledge_base, data_point, n_examples, randomize=False):
     examples = get_examples_from_db(
         knowledge_base, data_point, n_examples, "question", randomize
     )
-    formatted_examples = format_rag_sql_examples(examples)
-
+    if len(examples) > 0:
+        formatted_examples = format_rag_sql_examples(examples)
+    else:
+        formatted_examples = ""
     inference_prompt = f"""You are a powerful text-to-SQL model. Your job is to answer questions about a database. You are given a question and context regarding one or more tables. You must output the SQL query that answers the question.
 {formatted_examples}
 Please generate the SQL query that answers the following:
@@ -103,7 +103,10 @@ def generate_rag_func_representation_prompt(
     examples = get_examples_from_db(
         knowledge_base, data_point, n_examples, "target", randomize
     )
-    formatted_examples = format_rag_func_rep_examples(examples)
+    if len(examples) > 0:
+        formatted_examples = format_rag_func_rep_examples(examples)
+    else:
+        formatted_examples = ""
 
     inference_prompt = f"""Given a target sentence construct the underlying meaning representation of the input sentence as a single function with attributes and attribute values.
 This function should describe the target string accurately and the function must be one of the following ['inform', 'request', 'give_opinion', 'confirm', 'verify_attribute', 'suggest', 'request_explanation', 'recommend', 'request_attribute'].
