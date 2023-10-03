@@ -155,8 +155,7 @@ def generate_gsm8k_prompt(knowledge_base, data_point, n_examples, randomize=Fals
     else:
         formatted_examples = ""
 
-    inference_prompt = f"""{formatted_examples}
-Solve the following math problem thinking step-by-step:
+    inference_prompt = f"""{formatted_examples}Solve the following math problem thinking step-by-step:
 Problem:
 {data_point["question"]}
 
