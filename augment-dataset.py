@@ -11,14 +11,16 @@ from prompt_setup import (
     # get_sql_examples,
     generate_rag_sql_prompt,
     generate_rag_func_representation_prompt,
+    generate_gsm8k_prompt,
 )
 
 
 def add_prompt_features(example, knowledge_base, n_examples, randomize=False):
     # Add your logic to generate the extra feature here
-    full_prompt, inference_prompt = generate_rag_func_representation_prompt(
+    full_prompt, inference_prompt = generate_gsm8k_prompt(
         knowledge_base, example, n_examples, randomize
     )
+    print("full_prompt", full_prompt)
     example["full_prompt"] = full_prompt
     example["inference_prompt"] = inference_prompt
     return example
@@ -27,7 +29,7 @@ def add_prompt_features(example, knowledge_base, n_examples, randomize=False):
 def augment_dataset_with_prompts(
     dataset_name, knowledge_base, n_examples=1, randomize=False
 ):
-    dataset_dict = load_dataset(dataset_name)
+    dataset_dict = load_dataset(dataset_name, "main")
 
     for split, dataset in dataset_dict.items():
         print(dataset)
@@ -69,16 +71,17 @@ print(default_ef.model)
 
 # %%
 # so first we need to generate the knowledge_base
-dataset_name = "gem/viggo"
+dataset_name = "gsm8k"
+embedding_feature = "question"
 knowledge_base = generate_knowledge_base_from_hf_dataset(
-    dataset_name, "target", openai_ef
+    dataset_name, embedding_feature, openai_ef
 )
 print(knowledge_base.count())
 print(get_embedding_model_name(knowledge_base._embedding_function))
 # entries = get_random_entries(knowledge_base, 1)
 # print(entries)
 augment_dataset_with_prompts(
-    dataset_name, knowledge_base, n_examples=0, randomize=False
+    dataset_name, knowledge_base, n_examples=1, randomize=False
 )
 
 

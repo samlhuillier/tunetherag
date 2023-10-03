@@ -97,6 +97,30 @@ def format_rag_func_rep_examples(examples):
 {formatted_examples}"""
 
 
+def format_rag_gsm8k_examples(examples):
+    def format_example(i, example):
+        return f"""Problem:
+{example["question"]}
+
+Answer:
+{example["answer"]}
+"""
+
+    formatted_examples = "\n".join(
+        format_example(i, example) for i, example in enumerate(examples)
+    )
+
+    prefix = (
+        "Given the following example:"
+        if len(examples) == 1
+        else "Given the following examples:"
+    )
+
+    return f"""
+{prefix}
+{formatted_examples}"""
+
+
 def generate_rag_func_representation_prompt(
     knowledge_base, data_point, n_examples, randomize=False
 ):
@@ -119,4 +143,24 @@ Please generate the underlying meaning representation of the following:
 ### Meaning representation:"""
 
     full_prompt = f"{inference_prompt}\n{data_point['meaning_representation']}"
+    return full_prompt, inference_prompt
+
+
+def generate_gsm8k_prompt(knowledge_base, data_point, n_examples, randomize=False):
+    examples = get_examples_from_db(
+        knowledge_base, data_point, n_examples, "question", randomize
+    )
+    if len(examples) > 0:
+        formatted_examples = format_rag_gsm8k_examples(examples)
+    else:
+        formatted_examples = ""
+
+    inference_prompt = f"""{formatted_examples}
+Solve the following math problem thinking step-by-step:
+Problem:
+{data_point["question"]}
+
+Answer:"""
+
+    full_prompt = f"{inference_prompt}\n{data_point['answer']}"
     return full_prompt, inference_prompt

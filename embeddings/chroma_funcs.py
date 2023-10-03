@@ -53,8 +53,9 @@ def generate_knowledge_base_from_hf_dataset(
     )
 
     if collection.count() == 0:
-        dataset = load_dataset(hf_dataset_name, split=dataset_split)
-        dataset = dataset.map(remove_references)
+        dataset = load_dataset(hf_dataset_name, "main", split=dataset_split)
+        print(dataset)
+        # dataset = dataset.map(remove_references)
 
         chunk_size = 300
 
