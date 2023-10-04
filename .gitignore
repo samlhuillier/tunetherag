@@ -19,3 +19,5 @@ training-code/1-example-new-fix-chroma-bug-tune-for-rag-different-db_id-openai-e
 training-code/2-examples-new-fix-chroma-bug-tune-for-rag-different-db_id-openai-embedding-ada-002
 training-code/viggo-0-example-codellama7b
 training-code/viggo-1-example-openai-embedding-ada-002
+training-code/gsm8k-1-example-codellama7b
+training-code/gsm8k-1-example-llama2-7b

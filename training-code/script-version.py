@@ -65,12 +65,12 @@ from datasets import load_dataset
 
 train_dataset = load_dataset(
     "json",
-    data_files="/home/sam/finetune-llm-for-rag/datasets/viggo/gem-viggo-train-with-0-examples-random-False-emb_fn-text-embedding-ada-002.jsonl",
+    data_files="/home/sam/finetune-llm-for-rag/datasets/gsm8k/gsm8k-train-with-1-examples-random-False-emb_fn-text-embedding-ada-002.jsonl",
     split="train",
 )
 eval_dataset = load_dataset(
     "json",
-    data_files="/home/sam/finetune-llm-for-rag/datasets/viggo/gem-viggo-test-with-0-examples-random-False-emb_fn-text-embedding-ada-002.jsonl",
+    data_files="/home/sam/finetune-llm-for-rag/datasets/gsm8k/gsm8k-test-with-1-examples-random-False-emb_fn-text-embedding-ada-002.jsonl",
     split="train",
 )
 print(train_dataset)
@@ -103,8 +103,9 @@ model = AutoModelForCausalLM.from_pretrained(
     load_in_8bit=True,
     torch_dtype=torch.float16,
     device_map="auto",
+    token="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",
 )
-tokenizer = AutoTokenizer.from_pretrained("codellama/CodeLlama-7b-hf")
+tokenizer = AutoTokenizer.from_pretrained("codellama/CodeLlama-7b-hf", token="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")
 
 # %%
 tokenizer.add_eos_token = True
@@ -176,7 +177,7 @@ model = get_peft_model(model, config)
 # Optional stuff to setup Weights and Biases to view training graphs:
 
 # %%
-wandb_project = "viggo-first"
+wandb_project = "gsm8k-finetune-llm-for-rag"
 if len(wandb_project) > 0:
     os.environ["WANDB_PROJECT"] = wandb_project
 
@@ -193,15 +194,15 @@ if torch.cuda.device_count() > 1:
 
 # %%
 batch_size = 128
-per_device_train_batch_size = 64
+per_device_train_batch_size = 16
 gradient_accumulation_steps = batch_size // per_device_train_batch_size
-output_dir = "viggo-0-example-codellama7b"
+output_dir = "gsm8k-1-example-codellama7b"
 
 training_args = TrainingArguments(
     per_device_train_batch_size=per_device_train_batch_size,
     gradient_accumulation_steps=gradient_accumulation_steps,
     warmup_steps=100,
-    max_steps=600,
+    max_steps=1000,
     learning_rate=3e-4,
     fp16=True,
     logging_steps=10,
@@ -216,7 +217,7 @@ training_args = TrainingArguments(
     # ddp_find_unused_parameters=False if ddp else None,
     group_by_length=True,  # group sequences of roughly the same length together to speed up training
     report_to="wandb",  # if use_wandb else "none",
-    run_name=f"0-example-codellama7b-{datetime.now().strftime('%Y-%m-%d-%H-%M')}",  # if use_wandb else None,
+    run_name=f"1-example-codellama7b-{datetime.now().strftime('%Y-%m-%d-%H-%M')}",  # if use_wandb else None,
 )
 
 trainer = Trainer(
