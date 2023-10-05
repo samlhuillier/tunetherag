@@ -29,7 +29,7 @@ for data_point in data:
 import torch
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig, AutoTokenizer
 
-base_model = "meta-llama/Llama-2-7b-hf"
+base_model = "codellama/CodeLlama-7b-hf"
 model = AutoModelForCausalLM.from_pretrained(
     base_model,
     load_in_8bit=True,
@@ -37,8 +37,8 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",
 )
 from peft import PeftModel
-model = PeftModel.from_pretrained(model, "/home/sam/finetune-llm-for-rag/training-code/gsm8k-1-example-llama2-7b/checkpoint-400")
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
+model = PeftModel.from_pretrained(model, "/home/sam/finetune-llm-for-rag/training-code/gsm8k-1-example-codellama7b/checkpoint-360")
+tokenizer = AutoTokenizer.from_pretrained("codellama/CodeLlama-7b-hf")
 
 tokenizer.pad_token = tokenizer.eos_token
 
@@ -47,7 +47,7 @@ outputs = []
 print("length of prompts: ", len(prompts))
 model.eval()
 
-with torch.no_grad(), open('gsm8k-one-example-llama2-7b-yesfinetune-checkpoint-400.txt', 'a') as f:
+with torch.no_grad(), open('gsm8k-one-example-codellama-7b-yesfinetune-checkpoint-360.txt', 'a') as f:
     for i in range(0, len(prompts), batch_size):
         print("i is: ", i)
         batch_inputs = prompts[i:i+batch_size]
