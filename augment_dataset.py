@@ -11,32 +11,21 @@ from prompt_setup import (
 )
 
 
-def format_math_example(example):
-    inference_prompt = f"""### Problem:
-{example["question"]}
-
-### Answer:"""
-    full_prompt = f"{inference_prompt}\n{example['answer']}"
-    return full_prompt, inference_prompt
-
-
-prompt = "Solve the following math problem thinking step-by-step:"
-
-
-def add_prompt_features(example, knowledge_base, embed_feature, n_examples):
+def add_prompt_features(
+    example, knowledge_base, embed_feature, format_example, prompt, n_examples
+):
     # Add your logic to generate the extra feature here
     full_prompt, inference_prompt = generate_generic_prompt(
-        knowledge_base, example, embed_feature, n_examples, prompt, format_math_example
+        knowledge_base, example, embed_feature, n_examples, prompt, format_example
     )
-    print("inference_prompt", inference_prompt)
-    print("full_prompt", full_prompt)
+
     example["full_prompt"] = full_prompt
     example["inference_prompt"] = inference_prompt
     return example
 
 
 def augment_dataset_with_prompts(
-    dataset_args, knowledge_base, embed_feature, n_examples=1
+    dataset_args, knowledge_base, embed_feature, format_example, prompt, n_examples=1
 ):
     # print("dataset_args", **dataset_args)
     dataset_dict = load_dataset(*dataset_args.values())
@@ -45,7 +34,12 @@ def augment_dataset_with_prompts(
         print(dataset)
         dataset = dataset.map(
             lambda example: add_prompt_features(
-                example, knowledge_base, embed_feature, n_examples=n_examples
+                example,
+                knowledge_base,
+                embed_feature,
+                format_example,
+                prompt,
+                n_examples,
             ),
         )
 
