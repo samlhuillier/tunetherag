@@ -37,14 +37,15 @@ def remove_references(entry):
 
 
 def generate_knowledge_base_from_hf_dataset(
-    hf_dataset_name, embed_feature, emb_fn, dataset_split="train"
+    dataset_args, embed_feature, emb_fn, dataset_split="train"
 ):
     # so here, we should set the name of the collection based on the emb_fn
     print("embd_fn", emb_fn)
     model_name = get_embedding_model_name(emb_fn)
     # emb_fn_name = emb_fn._model_name
+    dataset_name = dataset_args["dataset_name"]
     collection_name = (
-        hf_dataset_name.replace("/", "-") + "-" + dataset_split + "-" + model_name
+        dataset_name.replace("/", "-") + "-" + dataset_split + "-" + model_name
     )[:62]
 
     # client.delete_collection(collection_name)
@@ -53,7 +54,7 @@ def generate_knowledge_base_from_hf_dataset(
     )
 
     if collection.count() == 0:
-        dataset = load_dataset(hf_dataset_name, "main", split=dataset_split)
+        dataset = load_dataset(*dataset_args.values(), split=dataset_split)
         print(dataset)
         # dataset = dataset.map(remove_references)
 
