@@ -12,12 +12,13 @@ from prompt_setup import (
     generate_rag_sql_prompt,
     generate_rag_func_representation_prompt,
     generate_gsm8k_prompt,
+    generate_generic_prompt,
 )
 
 
 def add_prompt_features(example, knowledge_base, n_examples, randomize=False):
     # Add your logic to generate the extra feature here
-    full_prompt, inference_prompt = generate_gsm8k_prompt(
+    full_prompt, inference_prompt = generate_generic_prompt(
         knowledge_base, example, n_examples, randomize
     )
     print("full_prompt", full_prompt)
