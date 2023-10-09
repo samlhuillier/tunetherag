@@ -23,3 +23,4 @@ training-code/gsm8k-1-example-codellama7b
 training-code/gsm8k-1-example-llama2-7b
 training-code/gsm8k-0-example-codellama7b
 training-code/gsm8k-0-example-llama2
+__pycache__

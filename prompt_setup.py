@@ -32,21 +32,15 @@ def format_rag_sql_examples(examples):
 {formatted_examples}"""
 
 
-def get_examples_from_db(
-    knowledge_base, data_point, n_examples, embed_feature, randomize=False
-):
+def get_examples_from_db(knowledge_base, data_point, n_examples, embed_feature):
     examples = []
     if n_examples > 0:
-        if randomize:
-            examples = get_random_entries(knowledge_base, n_examples)["metadatas"]
-        else:
-            examples = get_closest_entries(
-                knowledge_base,
-                data_point[embed_feature],
-                embed_feature,
-                n_results=n_examples,
-            )["metadatas"][0]
-        print(data_point[embed_feature], " -> ", examples[0][embed_feature])
+        examples = get_closest_entries(
+            knowledge_base,
+            data_point[embed_feature],
+            embed_feature,
+            n_results=n_examples,
+        )["metadatas"][0]
     return examples
 
 
