@@ -25,10 +25,13 @@ def format_math_example(example):
     return full_prompt, inference_prompt
 
 
+prompt = "Solve the following math problem thinking step-by-step:"
+
+
 def add_prompt_features(example, knowledge_base, embed_feature, n_examples):
     # Add your logic to generate the extra feature here
     full_prompt, inference_prompt = generate_generic_prompt(
-        knowledge_base, example, embed_feature, n_examples, format_math_example
+        knowledge_base, example, embed_feature, n_examples, prompt, format_math_example
     )
     print("inference_prompt", inference_prompt)
     print("full_prompt", full_prompt)

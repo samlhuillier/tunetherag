@@ -187,7 +187,7 @@ def format_rag_examples(examples, format_example):
 
 
 def generate_generic_prompt(
-    knowledge_base, data_point, embed_feature, n_examples, format_example
+    knowledge_base, data_point, embed_feature, n_examples, prompt, format_example
 ):
     examples = get_examples_from_db(
         knowledge_base, data_point, embed_feature, n_examples
@@ -198,8 +198,6 @@ def generate_generic_prompt(
         formatted_examples = ""
 
     full_example, inference_example = format_example(data_point)
-
-    prompt = "Solve the following math problem thinking step-by-step:"
 
     base_prompt = f"""{formatted_examples}\n{prompt}"""
 
