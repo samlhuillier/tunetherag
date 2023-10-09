@@ -158,19 +158,23 @@ def get_examples_from_db(knowledge_base, data_point, n_examples, embed_feature):
     return examples
 
 
-def format_rag_examples(examples):
-    def format_example(i, example):
-        return f"""Problem:
+def format_math_example(i, example):
+    inference_prompt = f"""Problem:
 {example["question"]}
 
 Answer:
-{example["answer"]}
 """
+    full_prompt = f"{inference_prompt}\n{example['answer']}"
+    return full_prompt, inference_prompt
 
+
+def format_rag_examples(examples, format_example):
     formatted_examples = "\n".join(
-        format_example(i, example) for i, example in enumerate(examples)
+        full_prompt
+        for full_prompt, _ in (
+            format_example(i, example) for i, example in enumerate(examples)
+        )
     )
-
     prefix = (
         "Given the following example:"
         if len(examples) == 1
@@ -187,7 +191,7 @@ def generate_generic_prompt(knowledge_base, data_point, n_examples, embed_featur
         knowledge_base, data_point, n_examples, embed_feature
     )
     if len(examples) > 0:
-        formatted_examples = format_rag_examples(examples)
+        formatted_examples = format_rag_examples(examples, format_math_example)
     else:
         formatted_examples = ""
 
