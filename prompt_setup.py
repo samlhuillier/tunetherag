@@ -146,7 +146,7 @@ from embeddings.chroma_funcs import (
 #     return full_prompt, inference_prompt
 
 
-def get_examples_from_db(knowledge_base, data_point, n_examples, embed_feature):
+def get_examples_from_db(knowledge_base, data_point, embed_feature, n_examples):
     examples = []
     if n_examples > 0:
         examples = get_closest_entries(
@@ -158,7 +158,7 @@ def get_examples_from_db(knowledge_base, data_point, n_examples, embed_feature):
     return examples
 
 
-def format_math_example(i, example):
+def format_math_example(example):
     inference_prompt = f"""Problem:
 {example["question"]}
 
@@ -169,10 +169,10 @@ Answer:
 
 
 def format_rag_examples(examples, format_example):
-    formatted_examples = "\n".join(
+    formatted_examples = "\n\n".join(
         full_prompt
         for full_prompt, _ in (
-            format_example(i, example) for i, example in enumerate(examples)
+            format_example(example) for _, example in enumerate(examples)
         )
     )
     prefix = (
@@ -181,25 +181,29 @@ def format_rag_examples(examples, format_example):
         else "Given the following examples:"
     )
 
-    return f"""
-{prefix}
-{formatted_examples}"""
+    return f"""{prefix}
+{formatted_examples}
+"""
 
 
-def generate_generic_prompt(knowledge_base, data_point, n_examples, embed_feature):
+def generate_generic_prompt(
+    knowledge_base, data_point, embed_feature, n_examples, format_example
+):
     examples = get_examples_from_db(
-        knowledge_base, data_point, n_examples, embed_feature
+        knowledge_base, data_point, embed_feature, n_examples
     )
     if len(examples) > 0:
-        formatted_examples = format_rag_examples(examples, format_math_example)
+        formatted_examples = format_rag_examples(examples, format_example)
     else:
         formatted_examples = ""
 
-    inference_prompt = f"""{formatted_examples}Solve the following math problem thinking step-by-step:
-Problem:
-{data_point[embed_feature]}
+    full_example, inference_example = format_example(data_point)
 
-Answer:"""
+    prompt = "Solve the following math problem thinking step-by-step:"
 
-    full_prompt = f"{inference_prompt}\n{data_point['answer']}"
-    return full_prompt, inference_prompt
+    base_prompt = f"""{formatted_examples}\n{prompt}"""
+
+    return (
+        f"""{base_prompt}\n{full_example}""",
+        f"""{base_prompt}\n{inference_example}""",
+    )

@@ -9,18 +9,28 @@ from chromadb.utils import embedding_functions
 from prompt_setup import (
     # format_rag_sql_examples,
     # get_sql_examples,
-    generate_rag_sql_prompt,
-    generate_rag_func_representation_prompt,
-    generate_gsm8k_prompt,
+    # generate_rag_sql_prompt,
+    # generate_rag_func_representation_prompt,
+    # generate_gsm8k_prompt,
     generate_generic_prompt,
 )
 
 
-def add_prompt_features(example, knowledge_base, n_examples, randomize=False):
+def format_math_example(example):
+    inference_prompt = f"""### Problem:
+{example["question"]}
+
+### Answer:"""
+    full_prompt = f"{inference_prompt}\n{example['answer']}"
+    return full_prompt, inference_prompt
+
+
+def add_prompt_features(example, knowledge_base, embed_feature, n_examples):
     # Add your logic to generate the extra feature here
     full_prompt, inference_prompt = generate_generic_prompt(
-        knowledge_base, example, n_examples, randomize
+        knowledge_base, example, embed_feature, n_examples, format_math_example
     )
+    print("inference_prompt", inference_prompt)
     print("full_prompt", full_prompt)
     example["full_prompt"] = full_prompt
     example["inference_prompt"] = inference_prompt
@@ -28,7 +38,7 @@ def add_prompt_features(example, knowledge_base, n_examples, randomize=False):
 
 
 def augment_dataset_with_prompts(
-    dataset_name, knowledge_base, n_examples=1, randomize=False
+    dataset_name, knowledge_base, embed_feature, n_examples=1
 ):
     dataset_dict = load_dataset(dataset_name, "main")
 
@@ -36,7 +46,7 @@ def augment_dataset_with_prompts(
         print(dataset)
         dataset = dataset.map(
             lambda example: add_prompt_features(
-                example, knowledge_base, n_examples=n_examples, randomize=randomize
+                example, knowledge_base, embed_feature, n_examples=n_examples
             ),
         )
 
@@ -55,7 +65,7 @@ def augment_dataset_with_prompts(
 
 
 openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-    api_key="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",
+    # api_key="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",
     model_name="text-embedding-ada-002",
 )
 
@@ -82,19 +92,5 @@ print(get_embedding_model_name(knowledge_base._embedding_function))
 # entries = get_random_entries(knowledge_base, 1)
 # print(entries)
 augment_dataset_with_prompts(
-    dataset_name, knowledge_base, n_examples=0, randomize=False
+    dataset_name, knowledge_base, embedding_feature, n_examples=1
 )
-
-
-# %%
-# test_datapoint = {
-#     "question": "What is the average horsepower for all cars produced before 1980 ?",
-#     "context": "CREATE TABLE cars_data (horsepower INTEGER, year INTEGER)",
-#     "answer": "select avg(horsepower) from cars_data where year  <  1980;",
-#     "db_id": "car_1",
-# }
-
-# full_prompt, inference_prompt = generate_rag_sql_prompt(
-#     knowledge_base, test_datapoint, n_examples=2
-# )
-# print(full_prompt)
