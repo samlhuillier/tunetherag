@@ -61,25 +61,21 @@ def augment_dataset_with_prompts(
         dataset.to_json(filename)
 
 
-openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-    # api_key="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",
-    model_name="text-embedding-ada-002",
-)
+# openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+#     model_name="text-embedding-ada-002",
+# )
 
-default_ef = embedding_functions.DefaultEmbeddingFunction()
+# default_ef = embedding_functions.DefaultEmbeddingFunction()
 
-print(default_ef.model)
+# print(default_ef.model)
 
-# %%
-# so first we need to generate the knowledge_base
-# dataset_name = "gsm8k"
-embedding_feature = "question"
-dataset_parameters = {"dataset_name": "gsm8k", "config_name": "main"}
+# embedding_feature = "question"
+# dataset_parameters = {"dataset_name": "gsm8k", "config_name": "main"}
 
-knowledge_base = generate_knowledge_base_from_hf_dataset(
-    dataset_parameters, embedding_feature, openai_ef
-)
+# knowledge_base = generate_knowledge_base_from_hf_dataset(
+#     dataset_parameters, embedding_feature, openai_ef
+# )
 
-augment_dataset_with_prompts(
-    dataset_parameters, knowledge_base, embedding_feature, n_examples=1
-)
+# augment_dataset_with_prompts(
+#     dataset_parameters, knowledge_base, embedding_feature, n_examples=1
+# )
