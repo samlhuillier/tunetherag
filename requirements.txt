@@ -1,0 +1,4 @@
+chromadb
+ipykernel
+datasets
+openai
