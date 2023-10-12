@@ -11,7 +11,7 @@
   <p align="center">
     Convert any Huggingface dataset to a retrieval-augmented dataset
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Read the blog post »</strong></a>
+    <a href="https://ragntune.com/blog/Fine-tuning-an-LLM-to-be-good-at-RAG"><strong>Read the blog post »</strong></a>
    
   </p>
 </div>
