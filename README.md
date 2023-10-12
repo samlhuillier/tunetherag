@@ -45,7 +45,11 @@ Use the `BLANK_README.md` to get started.
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-*
+1. Clone repo
+```sh
+git clone https://github.com/samlhuillier/tunetherag.git
+```
+2. Install requirements
   ```sh
   pip install -r requirements.txt
   ```
@@ -55,18 +59,27 @@ This is an example of how to list things you need to use the software and how to
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
 1. Open ```tunetherag.ipynb```
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+2. In the third cell, modify the dataset loading arguments:
+   ```python
+   embedding_feature = "question"
+   dataset_parameters = {"dataset_name": "gsm8k", "config_name": "main"}
    ```
-3. Install NPM packages
-   ```sh
-   npm install
+   (```embedding_feature``` is what will be embedded and ```dataset_parameters``` will be plugged into ```load_dataset```)
+3. Setup prompts:
+   ```python
+   def format_math_example(example):
+    inference_prompt = f"""### Problem:
+    {example["question"]}
+
+    ### Answer:"""
+
+    full_prompt = f"{inference_prompt}\n{example['answer']}"
+
+    return full_prompt, inference_prompt
+   
+   math_prompt = "Solve the following math problem thinking step-by-step:"
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+4. Run cells to generate the retrieval augmented dataset!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
