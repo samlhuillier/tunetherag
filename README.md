@@ -51,7 +51,7 @@ CREATE TABLE singer (Id VARCHAR)
 ```
 And these are the results of using retrieval-augmented prompts vs few-shot prompts:
 
-![Description or Alt Text](https://ragntune.com/static/images/gpt35/chart1.svg)
+![Description or Alt Text](https://ragntune.com/static/images/tuneforrag/chart.svg)
 
 
 <!-- GETTING STARTED -->
