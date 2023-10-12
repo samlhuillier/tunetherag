@@ -26,7 +26,7 @@
 - Choose the embedding model to perform the semantic search.
 - Customise the prompts.
 
-For example, the data point from an SQL dataset ```{}``` gets prompted to be:
+For example, the data point from an SQL dataset ```{"question": "How many singers do we have?", "context": "CREATE TABLE singer (Id VARCHAR)"}``` gets prompted to be:
 ```
 You are a powerful text-to-SQL model. Your job is to answer questions about a database. You are given a question and context regarding one or more tables. You must output the SQL query that answers the question.
 
@@ -92,17 +92,9 @@ git clone https://github.com/samlhuillier/tunetherag.git
    
    math_prompt = "Solve the following math problem thinking step-by-step:"
    ```
-4. Run cells to generate the retrieval augmented dataset!
+4. Run cells to generate the retrieval augmented dataset which will be saved as a set of json files per split!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 
 
@@ -111,16 +103,6 @@ Contributions are what make the open source community such an amazing place to l
 
 Distributed under the MIT License.
 
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
